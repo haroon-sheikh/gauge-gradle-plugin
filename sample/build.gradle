@@ -10,19 +10,18 @@ version = "1.1.0"
 
 description = "My Gauge Tests"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 sourceSets {
     spec {
-        java.srcDir 'src/spec/java'
+        java {
+            srcDirs('src/spec/')
+        }
     }
     test {
         compileClasspath += sourceSets.spec.runtimeClasspath
+        runtimeClasspath += sourceSets.spec.runtimeClasspath
     }
 }
 

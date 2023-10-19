@@ -1,23 +1,15 @@
 plugins {
     id 'java'
-    id 'groovy'
-    id 'maven'
-    id "java-gradle-plugin"
-    id "com.gradle.plugin-publish" version "0.12.0"
+    id 'java-gradle-plugin'
+    id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    implementation gradleApi()
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.7.7'
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
 }
 
 apply from: 'gradlePortal.gradle'
