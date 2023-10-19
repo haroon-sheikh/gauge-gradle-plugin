@@ -10,14 +10,14 @@ version = "1.1.0"
 
 description = "My Gauge Tests"
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 sourceSets {
     spec {
-        java {
-            srcDirs('src/spec/')
-        }
+        java.srcDirs('src/spec/')
     }
     test {
         compileClasspath += sourceSets.spec.runtimeClasspath
