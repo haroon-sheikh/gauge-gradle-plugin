@@ -15,7 +15,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GaugePluginTest {
-    private static final String GAUGE = "gauge";
+    private static final String GAUGE_PLUGIN_ID = "org.gauge";
+    private static final String GAUGE_TASK = "gauge";
     private Project project;
 
     @Before
@@ -25,19 +26,19 @@ public class GaugePluginTest {
 
     @Test
     public void pluginShouldBeAddedOnApply() {
-        project.getPluginManager().apply(GAUGE);
-        assertTrue(project.getPlugins().getPlugin(GAUGE) instanceof GaugePlugin);
-        assertFalse(project.getPlugins().getPlugin(GAUGE) instanceof JavaPlugin);
+        project.getPluginManager().apply(GAUGE_PLUGIN_ID);
+        assertTrue(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof GaugePlugin);
+        assertFalse(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof JavaPlugin);
     }
 
     @Test
     public void taskShouldBeAddedOnApply() {
-        project.getPluginManager().apply(GAUGE);
+        project.getPluginManager().apply(GAUGE_PLUGIN_ID);
         TaskContainer tasks = project.getTasks();
         assertEquals(2, tasks.size());
 
         SortedMap<String, Task> tasksMap = tasks.getAsMap();
-        Task gauge = tasksMap.get(GAUGE);
+        Task gauge = tasksMap.get(GAUGE_TASK);
         Task classpath = tasksMap.get("classpath");
         assertEquals("verification", gauge.getGroup());
         assertTrue(gauge instanceof GaugeTask);
