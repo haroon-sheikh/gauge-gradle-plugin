@@ -3,14 +3,14 @@ package com.thoughtworks.gauge.gradle;
 import com.thoughtworks.gauge.gradle.util.ProcessBuilderFactory;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +28,7 @@ public class GaugeTaskTest {
     private Project project;
     private ProcessBuilderFactory factory;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         GaugePlugin plugin = new GaugePlugin();
         project = ProjectBuilder.builder().build();

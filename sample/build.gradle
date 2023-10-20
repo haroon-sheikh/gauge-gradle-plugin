@@ -2,7 +2,7 @@ import com.thoughtworks.gauge.gradle.GaugeTask
 
 plugins {
     id 'java'
-    id 'org.gauge' version '1.8.2'
+    id 'org.gauge' version '2.0.0'
 }
 
 group = "my-gauge-tests"
@@ -76,3 +76,17 @@ task gaugeCi(type: GaugeTask) {
         }
     }
 }
+
+//gaugeNew {
+//    tags = "property"
+//}
+//
+//
+//task haroon() {
+//    doFirst {
+//        gaugeNew {
+//            tags = "inner"
+//        }
+//        println(gaugeNew.tags.get())
+//    }
+//}

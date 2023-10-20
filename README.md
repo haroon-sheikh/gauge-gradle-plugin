@@ -29,11 +29,11 @@ If you have an existing project and you would like to add the plugin manually yo
 ````groovy
 plugins {
     id 'java'
-    id 'org.gauge' version '1.8.0'
+    id 'org.gauge' version '2.0.0'
 }
 
 group = 'my-gauge-tests'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 description = "My Gauge Tests"
 
@@ -63,24 +63,24 @@ gauge {
 * update the `buildscript` to add the Gradle plugins repo and classpath
 
 ````groovy
-apply plugin: 'java'
-apply plugin: 'gauge'
-
-group = "my-gauge-tests"
-version = "1.0-SNAPSHOT"
-
-description = "My Gauge Tests"
-
 buildscript {
     repositories {
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url = uri("https://plugins.gradle.org/m2/")
         }
     }
     dependencies {
-         classpath "gradle.plugin.org.gauge.gradle:gauge-gradle-plugin:1.8.0"
+        classpath("gradle.plugin.org.gauge.gradle:gauge-gradle-plugin:2.0.0")
     }
 }
+
+apply plugin: 'java'
+apply plugin: 'org.gauge'
+
+group = "my-gauge-tests"
+version = "1.0"
+
+description = "My Gauge Tests"
 
 repositories {
     mavenCentral()

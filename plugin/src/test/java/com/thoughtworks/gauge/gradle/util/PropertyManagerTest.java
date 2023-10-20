@@ -4,22 +4,24 @@ import com.thoughtworks.gauge.gradle.GaugeExtension;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.gradle.internal.impldep.org.hamcrest.CoreMatchers.containsString;
+import static org.gradle.internal.impldep.org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PropertyManagerTest {
 
 
@@ -31,7 +33,7 @@ public class PropertyManagerTest {
 
     private GaugeExtension extension;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         extension = new GaugeExtension();
         Map<String,Object> properties = new HashMap<String, Object>();

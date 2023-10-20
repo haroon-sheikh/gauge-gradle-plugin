@@ -5,21 +5,21 @@ import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.SortedMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GaugePluginTest {
     private static final String GAUGE_PLUGIN_ID = "org.gauge";
     private static final String GAUGE_TASK = "gauge";
     private Project project;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         project = ProjectBuilder.builder().build();
     }
