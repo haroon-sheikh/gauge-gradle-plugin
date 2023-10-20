@@ -17,7 +17,7 @@ Maven Central & Bintray; with out-of-date versions available on the Gradle Plugi
 
 You can use this plugin on a new project via a Gauge [project template](https://docs.gauge.org/latest/installation.html#project-templates):
 
-```
+```bash
 gauge init java_gradle
 ```
 
@@ -26,16 +26,11 @@ gauge init java_gradle
 If you have an existing project and you would like to add the plugin manually you can add it like the below
 
 
-````groovy
+```groovy
 plugins {
     id 'java'
     id 'org.gauge' version '2.0.0'
 }
-
-group = 'my-gauge-tests'
-version = '1.0'
-
-description = "My Gauge Tests"
 
 repositories {
     mavenCentral()
@@ -55,14 +50,14 @@ gauge {
     additionalFlags = '--verbose'
     gaugeRoot = '/opt/gauge'
 }
-````
+```
 
 ### Using legacy plugin 'apply' style
 
-* apply plugin `gauge` 
+* apply plugin `org.gauge` 
 * update the `buildscript` to add the Gradle plugins repo and classpath
 
-````groovy
+```groovy
 buildscript {
     repositories {
         maven {
@@ -76,11 +71,6 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'org.gauge'
-
-group = "my-gauge-tests"
-version = "1.0"
-
-description = "My Gauge Tests"
 
 repositories {
     mavenCentral()
@@ -103,28 +93,35 @@ gauge {
     environment("gauge_reports_dir", "custom/reports/")
     environment("logs_directory", "custom/logs/")
 }
-````
+```
 
 ## Usage
 
 ### Running
-````
+
+```bash
 gradle gauge
-````
-#### Execute list of specs
 ```
+
+#### Execute list of specs
+
+```bash
 gradle gauge -PspecsDir="specs/first.spec specs/second.spec"
 ```
+
 #### Execute specs in parallel
-```
+
+```bash
 gradle gauge -PinParallel=true -PspecsDir=specs
 ```
 #### Execute specs by tags
-```
+
+```bash
 gradle gauge -Ptags="!in-progress" -PspecsDir=specs
 ```
 #### Specifying execution environment
-```
+
+```bash
 gradle gauge -Penv="dev" -PspecsDir=specs
 ```
 
@@ -146,8 +143,7 @@ The following plugin properties can be additionally set:
 ### Adding/configuring custom Gauge tasks
 It is possible to define new custom Gauge tasks specific for different environments. For example,
 
-````groovy
-
+```groovy
 task gaugeDev(type: GaugeTask) {
     doFirst {
         gauge {
@@ -171,18 +167,20 @@ task gaugeTest(type: GaugeTask) {
         }
     }
 }
-````
+```
 
 ### Running gauge task with source code of gradle plugin
 run the gauge command with -
-````
+
+```bash
 gradle gauge --include-build {PATH_TO_GRADLE_PLUGIN}
-````
+```
 
 or add this property in `settings.gradle`
-````
+
+```bash
 includeBuild {PATH_TO_GRADLE_PLUGIN}
-````
+```
 
 ## License
 

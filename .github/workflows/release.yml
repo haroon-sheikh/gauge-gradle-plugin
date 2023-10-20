@@ -19,8 +19,7 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
       - name: Build artifacts
-        run: |
-          ./gradlew clean build
+        run: ./gradlew build
       - name: Upload to gradle portal
         run: |
           ./gradlew publishPlugins -Pgradle.publish.key=$GRADLE_PUBLISHKEY -Pgradle.publish.secret=$GRADLE_SECRET

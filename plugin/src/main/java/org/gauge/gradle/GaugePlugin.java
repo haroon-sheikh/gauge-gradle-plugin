@@ -11,17 +11,14 @@ import org.gradle.api.Project;
 
 public class GaugePlugin implements Plugin<Project> {
 
-    private static final String GAUGE = "gauge";
-    private static final String CLASSPATH = "classpath";
-
     @Override
     public void apply(Project project) {
-        project.getExtensions().create(GAUGE, GaugeExtension.class);
-        project.getExtensions().create("GAUGE2", GaugeExtensionNew.class);
-        project.getTasks().create(GAUGE, GaugeTask.class, task -> {
+        project.getExtensions().create("gaugeNew", GaugeExtensionNew.class);
+        project.getExtensions().create(GaugeConstants.GAUGE_EXTENSION_ID, GaugeExtension.class);
+        project.getTasks().create(GaugeConstants.GAUGE_TASK, GaugeTask.class, task -> {
             task.setGroup("verification");
             task.setDescription("Runs the Gauge test suite.");
         });
-        project.getTasks().create(CLASSPATH, ClasspathTask.class);
+        project.getTasks().create(GaugeConstants.CLASSPATH_TASK, ClasspathTask.class);
     }
 }

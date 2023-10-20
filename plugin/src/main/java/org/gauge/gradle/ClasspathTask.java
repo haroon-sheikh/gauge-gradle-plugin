@@ -20,6 +20,8 @@ public class ClasspathTask extends Test {
         GaugeExtension extension = project.getExtensions().findByType(GaugeExtension.class);
         PropertyManager propertyManager = new PropertyManager(project, extension);
         propertyManager.setProperties();
-        System.out.println(extension.getClasspath());
+        if (null != extension) {
+            System.out.println(extension.getClasspath());
+        }
     }
 }

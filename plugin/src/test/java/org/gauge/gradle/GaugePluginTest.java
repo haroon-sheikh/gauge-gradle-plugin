@@ -1,5 +1,8 @@
 package org.gauge.gradle;
 
+import org.gauge.gradle.ClasspathTask;
+import org.gauge.gradle.GaugePlugin;
+import org.gauge.gradle.GaugeTask;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;

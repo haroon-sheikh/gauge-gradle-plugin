@@ -25,13 +25,10 @@ public class PropertyManager {
     private static final String GAUGE_ROOT = "gaugeRoot";
     private static final String FAILED = "--failed";
     private static final String REPEAT = "--repeat";
-
-    private final Project project;
     private final GaugeExtension extension;
     private final Map<String, ?> properties;
 
     public PropertyManager(Project project, GaugeExtension extension) {
-        this.project = project;
         this.extension = extension;
         this.properties = project.getProperties();
     }

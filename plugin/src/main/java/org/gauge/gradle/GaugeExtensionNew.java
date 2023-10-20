@@ -4,7 +4,6 @@ import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.provider.ProviderFactory;
-import org.gradle.api.tasks.CompileClasspath;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 
@@ -18,7 +17,6 @@ public abstract class GaugeExtensionNew {
         getTags().convention(gradleProperty(GaugeConstants.TAGS).getOrNull());
         getSpecsDir().convention(gradleProperty(GaugeConstants.SPECS_DIR).getOrElse("specs"));
         getInParallel().convention(gradleProperty(GaugeConstants.IN_PARALLEL).map(Boolean::parseBoolean).getOrElse(false));
-        getNodes().convention(gradleProperty(GaugeConstants.NODES).getOrNull());
         getEnvironmentVariables().convention(Map.of());
         getAdditionalFlags().convention(gradleProperty(GaugeConstants.ADDITIONAL_FLAGS).getOrNull());
         getGaugeRoot().convention(gradleProperty(GaugeConstants.GAUGE_ROOT).getOrNull());
@@ -26,7 +24,6 @@ public abstract class GaugeExtensionNew {
 
     @Inject
     protected abstract ProviderFactory getProviders();
-
     @Input
     @Optional
     public abstract Property<String> getEnv();
@@ -45,7 +42,7 @@ public abstract class GaugeExtensionNew {
 
     @Input
     @Optional
-    public abstract Property<String> getNodes();
+    public abstract Property<Integer> getNodes();
 
     @Input
     @Optional
@@ -58,9 +55,6 @@ public abstract class GaugeExtensionNew {
     @Input
     @Optional
     public abstract Property<String> getGaugeRoot();
-
-    @CompileClasspath
-    public abstract Property<String> getClasspath();
 
     private Provider<String> gradleProperty(String name) {
         return getProviders().gradleProperty(name);

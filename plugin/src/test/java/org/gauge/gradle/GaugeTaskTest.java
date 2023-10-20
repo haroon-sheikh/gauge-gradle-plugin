@@ -1,5 +1,8 @@
 package org.gauge.gradle;
 
+import org.gauge.gradle.GaugeExtension;
+import org.gauge.gradle.GaugePlugin;
+import org.gauge.gradle.GaugeTask;
 import org.gauge.gradle.util.ProcessBuilderFactory;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
