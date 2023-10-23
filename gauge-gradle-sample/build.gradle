@@ -1,8 +1,8 @@
-import com.thoughtworks.gauge.gradle.GaugeTask
+import org.gauge.gradle.GaugeTask
 
 plugins {
     id 'java'
-    id 'org.gauge' version '1.8.2'
+    id 'org.gauge' version '2.0.0'
 }
 
 java {
@@ -23,9 +23,15 @@ sourceSets {
 dependencies {
     specImplementation 'com.thoughtworks.gauge:gauge-java:+'
     testImplementation 'com.thoughtworks.gauge:gauge-java:+'
-    testImplementation 'net.sourceforge.htmlunit:webdriver:2.6'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation('org.junit.jupiter:junit-jupiter:5.+')
 }
+
+tasks.register('cleanBuildDir', Delete) {
+    delete "${projectDir}/logs"
+    delete "${projectDir}/out"
+    delete "${projectDir}/reports"
+}
+tasks.clean.dependsOn("cleanBuildDir")
 
 gauge {
     specsDir = 'specs'
@@ -71,16 +77,27 @@ task gaugeCi(type: GaugeTask) {
     }
 }
 
-//gaugeNew {
-//    tags = "property"
-//}
-//
-//
-//task haroon() {
-//    doFirst {
-//        gaugeNew {
-//            tags = "inner"
-//        }
-//        println(gaugeNew.tags.get())
-//    }
-//}
+gaugeNew {
+    specsDir = 'specs'
+    inParallel = true
+    nodes = 4
+    env = 'ci'
+    additionalFlags = '--verbose'
+}
+
+import org.gauge.gradle.GaugeTaskNew
+
+tasks.register('gaugeNewDev', GaugeTaskNew) {
+    doFirst {
+        gaugeNew {
+            specsDir = 'specs'
+            inParallel = true
+            nodes = 2
+            env = 'dev'
+            additionalFlags = '--verbose'
+            gaugeRoot = "gauge"
+//            environmentVariables = ["key": "value", "haroon": "sheikh"]
+        }
+    }
+    environment = ["key": "value", "haroon": "sheikh"]
+}

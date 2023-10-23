@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
-public class GaugeTask extends Test {
+public abstract class GaugeTask extends Test {
     private final Logger log = LoggerFactory.getLogger("gauge");
 
     @TaskAction

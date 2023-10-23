@@ -1,8 +1,5 @@
 package org.gauge.gradle;
 
-import org.gauge.gradle.ClasspathTask;
-import org.gauge.gradle.GaugePlugin;
-import org.gauge.gradle.GaugeTask;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;
@@ -13,13 +10,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.SortedMap;
 
+import static org.gauge.gradle.GaugeConstants.GAUGE_CLASSPATH_TASK;
+import static org.gauge.gradle.GaugeConstants.GAUGE_PLUGIN_ID;
+import static org.gauge.gradle.GaugeConstants.GAUGE_TASK;
+import static org.gauge.gradle.GaugeConstants.GAUGE_TASK_GROUP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GaugePluginTest {
-    private static final String GAUGE_PLUGIN_ID = "org.gauge";
-    private static final String GAUGE_TASK = "gauge";
     private Project project;
 
     @BeforeEach
@@ -30,6 +29,7 @@ public class GaugePluginTest {
     @Test
     public void pluginShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
+        assertTrue(project.getPluginManager().hasPlugin(GAUGE_PLUGIN_ID));
         assertTrue(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof GaugePlugin);
         assertFalse(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof JavaPlugin);
     }
@@ -38,13 +38,13 @@ public class GaugePluginTest {
     public void taskShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
         TaskContainer tasks = project.getTasks();
-        assertEquals(2, tasks.size());
+        assertEquals(3, tasks.size());
 
         SortedMap<String, Task> tasksMap = tasks.getAsMap();
         Task gauge = tasksMap.get(GAUGE_TASK);
-        Task classpath = tasksMap.get("classpath");
-        assertEquals("verification", gauge.getGroup());
+        Task classpath = tasksMap.get(GAUGE_CLASSPATH_TASK);
+        assertEquals(GAUGE_TASK_GROUP, gauge.getGroup());
         assertTrue(gauge instanceof GaugeTask);
-        assertTrue(classpath instanceof ClasspathTask);
+        assertTrue(classpath instanceof GaugeClasspathTask);
     }
 }

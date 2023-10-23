@@ -54,8 +54,8 @@ gauge {
 
 ### Using legacy plugin 'apply' style
 
-* apply plugin `org.gauge` 
 * update the `buildscript` to add the Gradle plugins repo and classpath
+* apply plugin `org.gauge` 
 
 ```groovy
 buildscript {
@@ -65,7 +65,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("gradle.plugin.org.gauge.gradle:gauge-gradle-plugin:2.0.0")
+        classpath("org.gauge.gradle:gauge-gradle-plugin:2.0.0")
     }
 }
 
@@ -144,6 +144,8 @@ The following plugin properties can be additionally set:
 It is possible to define new custom Gauge tasks specific for different environments. For example,
 
 ```groovy
+import org.gauge.gradle.GaugeTask
+
 task gaugeDev(type: GaugeTask) {
     doFirst {
         gauge {

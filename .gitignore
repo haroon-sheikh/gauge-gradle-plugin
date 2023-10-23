@@ -5,13 +5,13 @@ build/
 report*
 log*
 repo
-sample/libs
-sample/report*
-sample/log*
-sample/.gauge
+gauge-gradle-sample/libs
+gauge-gradle-sample/report*
+gauge-gradle-sample/log*
+gauge-gradle-sample/.gauge
 local.properties
 plugin/out
-sample/out
+gauge-gradle-sample/out
 bin/
 **/build/
 .java-version
@@ -19,4 +19,4 @@ bin/
 .project
 .settings/org.eclipse.buildship.core.prefs
 plugin/.settings/org.eclipse.buildship.core.prefs
-sample/.settings/org.eclipse.buildship.core.prefs
+gauge-gradle-sample/.settings/org.eclipse.buildship.core.prefs

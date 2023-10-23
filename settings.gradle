@@ -4,5 +4,5 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-include 'plugin'
-include 'sample'
+include 'gauge-gradle-plugin'
+include 'gauge-gradle-sample'

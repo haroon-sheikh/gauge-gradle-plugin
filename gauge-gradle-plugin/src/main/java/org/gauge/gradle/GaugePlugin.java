@@ -15,10 +15,11 @@ public class GaugePlugin implements Plugin<Project> {
     public void apply(Project project) {
         project.getExtensions().create("gaugeNew", GaugeExtensionNew.class);
         project.getExtensions().create(GaugeConstants.GAUGE_EXTENSION_ID, GaugeExtension.class);
+        project.getTasks().create("gaugeNew", GaugeTaskNew.class);
         project.getTasks().create(GaugeConstants.GAUGE_TASK, GaugeTask.class, task -> {
-            task.setGroup("verification");
+            task.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
             task.setDescription("Runs the Gauge test suite.");
         });
-        project.getTasks().create(GaugeConstants.CLASSPATH_TASK, ClasspathTask.class);
+        project.getTasks().create(GaugeConstants.GAUGE_CLASSPATH_TASK, GaugeClasspathTask.class);
     }
 }

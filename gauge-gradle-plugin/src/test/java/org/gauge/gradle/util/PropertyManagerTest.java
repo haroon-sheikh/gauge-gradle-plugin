@@ -1,7 +1,6 @@
 package org.gauge.gradle.util;
 
 import org.gauge.gradle.GaugeExtension;
-import org.gauge.gradle.util.PropertyManager;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
