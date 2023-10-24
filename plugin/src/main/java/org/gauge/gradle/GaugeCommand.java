@@ -2,8 +2,11 @@ package org.gauge.gradle;
 
 import org.gradle.api.Project;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,34 +23,47 @@ class GaugeCommand {
         this.properties = project.getProperties();
     }
 
+    public String getExecutable() {
+        final String binary = "gauge";
+        return project.hasProperty(GaugeConstants.GAUGE_ROOT)
+                ? getExecutablePath(properties.get(GaugeConstants.GAUGE_ROOT).toString()).toString()
+                : extension.getGaugeRoot().isPresent()
+                ? getExecutablePath(extension.getGaugeRoot().get()).toString()
+                : binary;
+    }
+
+    private Path getExecutablePath(final String gaugeRoot) {
+        return Paths.get(gaugeRoot, "bin", "gauge");
+    }
+
     public List<String> getProjectDir() {
-        return List.of("--dir", project.getProjectDir().getAbsolutePath());
+        return List.of(GaugeProperty.PROJECT_DIR.getFlag(), project.getProjectDir().getAbsolutePath());
     }
 
     public List<String> getEnvironment() {
-        return List.of("--env", getEnv());
+        return List.of(GaugeProperty.ENV.getFlag(), getEnv().trim());
     }
 
     private String getEnv() {
-        return project.hasProperty(GaugeConstants.ENVIRONMENT)
-                ? properties.get(GaugeConstants.ENVIRONMENT).toString()
+        return project.hasProperty(GaugeProperty.ENV.getKey())
+                ? properties.get(GaugeProperty.ENV.getKey()).toString()
                 : extension.getEnv().get();
     }
 
-    public boolean isFailedOrRepeatFlagProvided() {
+    public boolean isNotFailedOrRepeatFlagProvided() {
         final List<String> flags = getAdditionalFlags();
-        return flags.contains("--failed") || flags.contains("--repeat");
+        return !flags.contains("--failed") && !flags.contains("--repeat");
     }
 
     public List<Object> getFlags() {
         final List<Object> flags = new ArrayList<>(getAdditionalFlags());
         // --repeat and --failed flags cannot be run with other flags
-        if (!isFailedOrRepeatFlagProvided()) {
+        if (isNotFailedOrRepeatFlagProvided()) {
             if (isInParallel()) {
-                flags.add("--parallel");
+                flags.add(GaugeProperty.IN_PARALLEL.getFlag());
                 final int nodes = getNodes();
                 if (nodes != 0) {
-                    flags.addAll(List.of("-n", nodes));
+                    flags.addAll(List.of(GaugeProperty.NODES.getFlag(), nodes));
                 }
             }
         }
@@ -55,11 +71,11 @@ class GaugeCommand {
     }
 
     private List<String> getAdditionalFlags() {
-        return project.hasProperty(GaugeConstants.ADDITIONAL_FLAGS)
-                ? getListFromString(properties.get(GaugeConstants.ADDITIONAL_FLAGS).toString())
+        return project.hasProperty(GaugeProperty.ADDITIONAL_FLAGS.getKey())
+                ? getListFromString(properties.get(GaugeProperty.ADDITIONAL_FLAGS.getKey()).toString())
                 : extension.getAdditionalFlags().isPresent()
                 ? getListFromString(extension.getAdditionalFlags().get())
-                : List.of();
+                : Collections.emptyList();
     }
 
     private List<String> getListFromString(final String value) {
@@ -67,28 +83,28 @@ class GaugeCommand {
     }
 
     private int getNodes() {
-        return project.hasProperty(GaugeConstants.NODES)
-                ? Integer.parseInt(properties.get(GaugeConstants.NODES).toString())
+        return project.hasProperty(GaugeProperty.NODES.getKey())
+                ? Integer.parseInt(properties.get(GaugeProperty.NODES.getKey()).toString())
                 : extension.getNodes().isPresent() ? extension.getNodes().get() : 0;
     }
 
     private boolean isInParallel() {
-        return project.hasProperty(GaugeConstants.IN_PARALLEL)
-                ? Boolean.parseBoolean(project.getProperties().get(GaugeConstants.IN_PARALLEL).toString())
+        return project.hasProperty(GaugeProperty.IN_PARALLEL.getKey())
+                ? Boolean.parseBoolean(project.getProperties().get(GaugeProperty.IN_PARALLEL.getKey()).toString())
                 : extension.getInParallel().get();
     }
 
     public List<String> getSpecsDir() {
-        final var specs = properties.containsKey(GaugeConstants.SPECS_DIR)
-                ? properties.get(GaugeConstants.SPECS_DIR).toString() : extension.getSpecsDir().get();
-        return getListFromString(specs);
+        final var specs = properties.containsKey(GaugeProperty.SPECS_DIR.getKey())
+                ? properties.get(GaugeProperty.SPECS_DIR.getKey()).toString() : extension.getSpecsDir().get();
+        return getListFromString(specs.trim());
     }
 
     public List<String> getTags() {
-        final String tags = project.hasProperty(GaugeConstants.TAGS)
-                ? properties.get(GaugeConstants.TAGS).toString()
+        final String tags = project.hasProperty(GaugeProperty.TAGS.getKey())
+                ? properties.get(GaugeProperty.TAGS.getKey()).toString()
                 : extension.getTags().isPresent() ? extension.getTags().get() : "";
-        return !tags.isEmpty() ? List.of("--tags", tags) : List.of();
+        return !tags.isEmpty() ? List.of("--tags", tags) : Collections.emptyList();
     }
 
 }

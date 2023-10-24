@@ -21,15 +21,15 @@ public abstract class GaugeTaskNew extends Test {
         final Project project = getProject();
         final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
-        logger.info("Running gauge ...");
+
         project.exec(spec -> {
             // Usage:
             // gauge <command> [flags] [args]
-            spec.executable("gauge");
+            spec.executable(command.getExecutable());
             spec.args("run");
             spec.args(command.getProjectDir());
             spec.args(command.getFlags());
-            if (!command.isFailedOrRepeatFlagProvided()) {
+            if (command.isNotFailedOrRepeatFlagProvided()) {
                 spec.args(command.getEnvironment());
                 spec.args(command.getTags());
                 spec.args(command.getSpecsDir());
@@ -38,6 +38,7 @@ public abstract class GaugeTaskNew extends Test {
             if (null != extension) {
                 extension.getEnvironmentVariables().get().forEach(spec::environment);
             }
+            logger.info("Running {} {}", spec.getExecutable(), spec.getArgs());
         });
     }
 

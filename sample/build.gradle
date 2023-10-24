@@ -27,8 +27,10 @@ sourceSets {
 
 dependencies {
     specImplementation 'com.thoughtworks.gauge:gauge-java:+'
+
     testImplementation 'com.thoughtworks.gauge:gauge-java:+'
-    testImplementation('org.junit.jupiter:junit-jupiter:5.+')
+    testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.register('cleanBuildDir', Delete) {
@@ -54,7 +56,6 @@ tasks.register('gaugeDev', GaugeTaskNew) {
             nodes = 2
             env = 'dev'
             additionalFlags = '--verbose'
-            gaugeRoot = "gauge"
         }
     }
 }
@@ -90,4 +91,12 @@ tasks.register('gaugeCi', GaugeTaskNew) {
             additionalFlags = '--verbose'
         }
     }
+}
+
+tasks.withType(GaugeTaskNew).configureEach {
+    // https://docs.gradle.org/8.2/userguide/upgrading_version_8.html#test_framework_implementation_dependencies
+    it.useJUnitPlatform()
+    // https://docs.gradle.org/8.2/userguide/upgrading_version_8.html#test_task_default_classpath
+    testClassesDirs = sourceSets.test.output
+    classpath = sourceSets.test.runtimeClasspath
 }

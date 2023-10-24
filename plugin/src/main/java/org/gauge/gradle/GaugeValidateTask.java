@@ -2,14 +2,11 @@ package org.gauge.gradle;
 
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.testing.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class GaugeValidateTask extends Test {
+public abstract class GaugeValidateTask extends GaugeTaskNew {
     private static final Logger logger = LoggerFactory.getLogger("gauge");
-
-
 
     public GaugeValidateTask() {
         this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
@@ -22,7 +19,6 @@ public abstract class GaugeValidateTask extends Test {
         final Project project = getProject();
         final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
-        logger.info("Running gauge validate ...");
         project.exec(spec -> {
             spec.executable("gauge");
             spec.args("validate");
@@ -32,6 +28,7 @@ public abstract class GaugeValidateTask extends Test {
             if (null != extension) {
                 extension.getEnvironmentVariables().get().forEach(spec::environment);
             }
+            logger.info("Running {} {}", spec.getExecutable(), spec.getArgs());
         });
     }
 

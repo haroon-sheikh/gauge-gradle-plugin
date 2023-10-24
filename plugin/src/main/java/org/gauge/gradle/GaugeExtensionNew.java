@@ -12,9 +12,9 @@ import javax.inject.Inject;
 public abstract class GaugeExtensionNew {
     @Inject
     public GaugeExtensionNew() {
-        getEnv().convention(gradleProperty(GaugeConstants.ENVIRONMENT).getOrElse("default"));
-        getSpecsDir().convention(gradleProperty(GaugeConstants.SPECS_DIR).getOrElse("specs"));
-        getInParallel().convention(gradleProperty(GaugeConstants.IN_PARALLEL).map(Boolean::parseBoolean).getOrElse(false));
+        getEnv().convention(gradleProperty(GaugeProperty.ENV.getKey()).getOrElse("default"));
+        getSpecsDir().convention(gradleProperty(GaugeProperty.SPECS_DIR.getKey()).getOrElse("specs"));
+        getInParallel().convention(gradleProperty(GaugeProperty.IN_PARALLEL.getKey()).map(Boolean::parseBoolean).getOrElse(false));
     }
 
     @Inject
