@@ -30,7 +30,7 @@ public abstract class GaugeTaskNew extends Test {
         System.out.println(properties.getTags());
         logger.info("Running gauge ...");
         project.exec(spec -> {
-            spec.executable(extension.getGaugeRoot().isPresent() ? extension.getGaugeRoot().get() : "gauge" );
+            spec.executable("gauge" );
             spec.args("run");
             spec.args("--dir", project.getProjectDir().getAbsolutePath());
             spec.args("--simple-console");
@@ -42,7 +42,6 @@ public abstract class GaugeTaskNew extends Test {
             spec.environment("gauge_custom_classpath", getClasspath().getAsPath());
             if (null != extension) {
                 spec.args(extension.getSpecsDir().get());
-                System.out.println(System.getenv("haroon"));
                 extension.getEnvironmentVariables().get().forEach(spec::environment);
             }
         });

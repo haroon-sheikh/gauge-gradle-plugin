@@ -2,7 +2,7 @@ import org.gauge.gradle.GaugeTask
 
 plugins {
     id 'java'
-    id 'org.gauge' version '2.0.0'
+    id 'org.gauge'
 }
 
 java {
@@ -96,8 +96,7 @@ tasks.register('gaugeNewDev', GaugeTaskNew) {
             env = 'dev'
             additionalFlags = '--verbose'
             gaugeRoot = "gauge"
-//            environmentVariables = ["key": "value", "haroon": "sheikh"]
+            tags = "haroon"
         }
     }
-    environment = ["key": "value", "haroon": "sheikh"]
 }

@@ -3,7 +3,5 @@ pluginManagement {
         mavenLocal()
         gradlePluginPortal()
     }
-    includeBuild "plugin"
+    includeBuild "../plugin"
 }
-include 'sample'
-rootProject.name = "gauge-gradle-plugin"

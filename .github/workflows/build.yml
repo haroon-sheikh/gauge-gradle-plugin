@@ -27,7 +27,9 @@ jobs:
         gauge-plugins: java, html-report
     - name: Build with Gradle on ubuntu
       if: matrix.os != 'windows-latest'
-      run: ./gradlew clean build gauge --warning-mode all
+      run: |
+        ./gradlew plugin:build
+        ./gradlew gauge --warning-mode all
     - name: Build with Gradle on windows
       if: matrix.os == 'windows-latest'
-      run: .\gradlew.bat clean build
+      run: .\gradlew.bat plugin:check build

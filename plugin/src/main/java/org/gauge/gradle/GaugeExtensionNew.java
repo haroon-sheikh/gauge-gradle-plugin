@@ -8,18 +8,13 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 public abstract class GaugeExtensionNew {
     @Inject
     public GaugeExtensionNew() {
         getEnv().convention(gradleProperty(GaugeConstants.ENVIRONMENT).getOrElse("default"));
-        getTags().convention(gradleProperty(GaugeConstants.TAGS).getOrNull());
         getSpecsDir().convention(gradleProperty(GaugeConstants.SPECS_DIR).getOrElse("specs"));
         getInParallel().convention(gradleProperty(GaugeConstants.IN_PARALLEL).map(Boolean::parseBoolean).getOrElse(false));
-        getEnvironmentVariables().convention(Map.of());
-        getAdditionalFlags().convention(gradleProperty(GaugeConstants.ADDITIONAL_FLAGS).getOrNull());
-        getGaugeRoot().convention(gradleProperty(GaugeConstants.GAUGE_ROOT).getOrNull());
     }
 
     @Inject
