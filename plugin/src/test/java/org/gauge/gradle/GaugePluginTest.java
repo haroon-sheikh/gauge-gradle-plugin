@@ -8,12 +8,11 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.SortedMap;
-
 import static org.gauge.gradle.GaugeConstants.GAUGE_CLASSPATH_TASK;
 import static org.gauge.gradle.GaugeConstants.GAUGE_PLUGIN_ID;
 import static org.gauge.gradle.GaugeConstants.GAUGE_TASK;
 import static org.gauge.gradle.GaugeConstants.GAUGE_TASK_GROUP;
+import static org.gauge.gradle.GaugeConstants.GAUGE_VALIDATE_TASK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,13 +37,15 @@ public class GaugePluginTest {
     public void taskShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
         TaskContainer tasks = project.getTasks();
-        assertEquals(3, tasks.size());
+        assertEquals(4, tasks.size());
 
-        SortedMap<String, Task> tasksMap = tasks.getAsMap();
+        var tasksMap = tasks.getAsMap();
         Task gauge = tasksMap.get(GAUGE_TASK);
         Task classpath = tasksMap.get(GAUGE_CLASSPATH_TASK);
+        Task validate = tasksMap.get(GAUGE_VALIDATE_TASK);
         assertEquals(GAUGE_TASK_GROUP, gauge.getGroup());
-        assertTrue(gauge instanceof GaugeTask);
+        assertTrue(gauge instanceof GaugeTaskNew);
         assertTrue(classpath instanceof GaugeClasspathTask);
+        assertTrue(validate instanceof GaugeValidateTask);
     }
 }

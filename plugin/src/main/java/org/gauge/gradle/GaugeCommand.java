@@ -79,8 +79,9 @@ class GaugeCommand {
     }
 
     public List<String> getSpecsDir() {
-        return List.of(properties.containsKey(GaugeConstants.SPECS_DIR)
-                ? properties.get(GaugeConstants.SPECS_DIR).toString() : extension.getSpecsDir().get());
+        final var specs = properties.containsKey(GaugeConstants.SPECS_DIR)
+                ? properties.get(GaugeConstants.SPECS_DIR).toString() : extension.getSpecsDir().get();
+        return getListFromString(specs);
     }
 
     public List<String> getTags() {

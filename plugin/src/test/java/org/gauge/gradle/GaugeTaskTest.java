@@ -1,8 +1,5 @@
 package org.gauge.gradle;
 
-import org.gauge.gradle.GaugeExtension;
-import org.gauge.gradle.GaugePlugin;
-import org.gauge.gradle.GaugeTask;
 import org.gauge.gradle.util.ProcessBuilderFactory;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -18,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GaugeTaskTest {
-    private static final String GAUGE = "gauge";
+    private static final String GAUGE = "gaugeOld";
     private static final String ENV_FLAG = "--env";
     private static final String TAGS_FLAG = "--tags";
     private static final String NODES_FLAG = "-n";

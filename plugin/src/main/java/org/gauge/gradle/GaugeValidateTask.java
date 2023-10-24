@@ -6,34 +6,28 @@ import org.gradle.api.tasks.testing.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class GaugeTaskNew extends Test {
+public abstract class GaugeValidateTask extends Test {
     private static final Logger logger = LoggerFactory.getLogger("gauge");
 
-    public GaugeTaskNew() {
+
+
+    public GaugeValidateTask() {
         this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
-        this.setDescription("Runs the Gauge test suite.");
+        this.setDescription("Check for validation and parse errors.");
         // So that previous outputs of this task cannot be reused
         this.getOutputs().upToDateWhen(task -> false);
     }
-
     @TaskAction
     public void execute() {
         final Project project = getProject();
         final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
-        logger.info("Running gauge ...");
+        logger.info("Running gauge validate ...");
         project.exec(spec -> {
-            // Usage:
-            // gauge <command> [flags] [args]
             spec.executable("gauge");
-            spec.args("run");
+            spec.args("validate");
             spec.args(command.getProjectDir());
-            spec.args(command.getFlags());
-            if (!command.isFailedOrRepeatFlagProvided()) {
-                spec.args(command.getEnvironment());
-                spec.args(command.getTags());
-                spec.args(command.getSpecsDir());
-            }
+            spec.args(command.getSpecsDir());
             spec.environment(GaugeConstants.GAUGE_CUSTOM_CLASSPATH, getClasspath().getAsPath());
             if (null != extension) {
                 extension.getEnvironmentVariables().get().forEach(spec::environment);

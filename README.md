@@ -97,6 +97,12 @@ gauge {
 
 ## Usage
 
+### Validating
+
+```bash
+gradle gaugeValidate 
+```
+
 ### Running
 
 ```bash

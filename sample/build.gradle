@@ -5,6 +5,11 @@ plugins {
     id 'org.gauge'
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -33,7 +38,7 @@ tasks.register('cleanBuildDir', Delete) {
 }
 tasks.clean.dependsOn("cleanBuildDir")
 
-gaugeNew {
+gauge {
     specsDir = 'specs'
     inParallel = true
     nodes = 4
@@ -41,9 +46,9 @@ gaugeNew {
     additionalFlags = '--verbose'
 }
 
-tasks.register('gaugeNewDev', GaugeTaskNew) {
+tasks.register('gaugeDev', GaugeTaskNew) {
     doFirst {
-        gaugeNew {
+        gauge {
             specsDir = 'specs'
             inParallel = true
             nodes = 2
@@ -54,18 +59,18 @@ tasks.register('gaugeNewDev', GaugeTaskNew) {
     }
 }
 
-tasks.register('gaugeNewDevRepeat', GaugeTaskNew) {
-    dependsOn("gaugeNewDev")
+tasks.register('gaugeDevRepeat', GaugeTaskNew) {
+    dependsOn("gaugeDev")
     doFirst {
-        gaugeNew {
+        gauge {
             additionalFlags = '--repeat --simple-console'
         }
     }
 }
 
-tasks.register('gaugeNewTest', GaugeTaskNew) {
+tasks.register('gaugeTest', GaugeTaskNew) {
     doFirst {
-        gaugeNew {
+        gauge {
             specsDir = 'specs'
             inParallel = true
             nodes = 4
@@ -75,9 +80,9 @@ tasks.register('gaugeNewTest', GaugeTaskNew) {
     }
 }
 
-tasks.register('gaugeNewCi', GaugeTaskNew) {
+tasks.register('gaugeCi', GaugeTaskNew) {
     doFirst {
-        gaugeNew {
+        gauge {
             specsDir = 'specs'
             inParallel = true
             nodes = 3
