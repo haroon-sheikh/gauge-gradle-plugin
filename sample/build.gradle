@@ -1,4 +1,4 @@
-import org.gauge.gradle.GaugeTask
+import org.gauge.gradle.GaugeTaskNew
 
 plugins {
     id 'java'
@@ -33,50 +33,6 @@ tasks.register('cleanBuildDir', Delete) {
 }
 tasks.clean.dependsOn("cleanBuildDir")
 
-gauge {
-    specsDir = 'specs'
-    inParallel = true
-    nodes = 4
-    env = 'ci'
-    additionalFlags = '--verbose'
-}
-
-task gaugeDev(type: GaugeTask) {
-    doFirst {
-        gauge {
-            specsDir = 'specs'
-            inParallel = true
-            nodes = 2
-            env = 'dev'
-            additionalFlags = '--verbose'
-        }
-    }
-}
-
-task gaugeTest(type: GaugeTask) {
-    doFirst {
-        gauge {
-            specsDir = 'specs'
-            inParallel = true
-            nodes = 4
-            env = 'test'
-            additionalFlags = '--verbose'
-        }
-    }
-}
-
-task gaugeCi(type: GaugeTask) {
-    doFirst {
-        gauge {
-            specsDir = 'specs'
-            inParallel = true
-            nodes = 3
-            env = 'ci'
-            additionalFlags = '--verbose'
-        }
-    }
-}
-
 gaugeNew {
     specsDir = 'specs'
     inParallel = true
@@ -84,8 +40,6 @@ gaugeNew {
     env = 'ci'
     additionalFlags = '--verbose'
 }
-
-import org.gauge.gradle.GaugeTaskNew
 
 tasks.register('gaugeNewDev', GaugeTaskNew) {
     doFirst {
@@ -96,7 +50,39 @@ tasks.register('gaugeNewDev', GaugeTaskNew) {
             env = 'dev'
             additionalFlags = '--verbose'
             gaugeRoot = "gauge"
-            tags = "haroon"
+        }
+    }
+}
+
+tasks.register('gaugeNewDevRepeat', GaugeTaskNew) {
+    dependsOn("gaugeNewDev")
+    doFirst {
+        gaugeNew {
+            additionalFlags = '--repeat --simple-console'
+        }
+    }
+}
+
+tasks.register('gaugeNewTest', GaugeTaskNew) {
+    doFirst {
+        gaugeNew {
+            specsDir = 'specs'
+            inParallel = true
+            nodes = 4
+            env = 'test'
+            additionalFlags = '--verbose'
+        }
+    }
+}
+
+tasks.register('gaugeNewCi', GaugeTaskNew) {
+    doFirst {
+        gaugeNew {
+            specsDir = 'specs'
+            inParallel = true
+            nodes = 3
+            env = 'ci'
+            additionalFlags = '--verbose'
         }
     }
 }

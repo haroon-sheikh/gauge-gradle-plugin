@@ -87,7 +87,7 @@ gauge {
     nodes = 2
     env = 'dev'
     tags = 'tag1'
-    additionalFlags = '--verbose'
+    additionalFlags = '--simple-console --verbose'
     gaugeRoot = '/opt/gauge'
     // additional environment variables to pass onto the gauge process
     environment("gauge_reports_dir", "custom/reports/")
@@ -137,7 +137,7 @@ The following plugin properties can be additionally set:
 | inParallel      | -PinParallel=true             | Execute specs in parallel                                     |
 | nodes           | -Pnodes=3                     | Number of parallel execution streams. Use with ```parallel``` |
 | env             | -Penv=qa                      | gauge env to run against                                      |
-| additionalFlags | -PadditionalFlags="--verbose" | Add additional gauge flags to execution                       |
+| additionalFlags | -PadditionalFlags="--verbose" | Add additional gauge flags to execution separated by space    |
 | gaugeRoot       | -PgaugeRoot="/opt/gauge"      | Path to gauge installation root                               |
 
 ### Adding/configuring custom Gauge tasks
@@ -153,7 +153,7 @@ task gaugeDev(type: GaugeTask) {
             inParallel = true
             nodes = 2
             env = 'dev'
-            additionalFlags = '--verbose'
+            additionalFlags = '--simple-console --verbose'
         }
     }
 }
@@ -165,7 +165,7 @@ task gaugeTest(type: GaugeTask) {
             inParallel = true
             nodes = 4
             env = 'test'
-            additionalFlags = '--verbose'
+            additionalFlags = '--simple-console --verbose'
         }
     }
 }

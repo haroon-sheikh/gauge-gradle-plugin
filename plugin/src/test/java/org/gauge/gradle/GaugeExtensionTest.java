@@ -1,7 +1,5 @@
 package org.gauge.gradle;
 
-import org.gauge.gradle.GaugeConstants;
-import org.gauge.gradle.GaugeExtensionNew;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Test;
