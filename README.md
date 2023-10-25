@@ -136,15 +136,16 @@ Note : Pass specsDir parameter as the last one.
 ### All additional Properties
 The following plugin properties can be additionally set:
 
-| Property name   | Usage                         | Description                                                   |
-|-----------------|-------------------------------|---------------------------------------------------------------|
-| specsDir        | -PspecsDir=specs              | Gauge specs directory path. Required for executing specs      |
-| tags            | -Ptags="tag1 & tag2"          | Filter specs by specified tags expression                     |
-| inParallel      | -PinParallel=true             | Execute specs in parallel                                     |
-| nodes           | -Pnodes=3                     | Number of parallel execution streams. Use with ```parallel``` |
-| env             | -Penv=qa                      | gauge env to run against                                      |
-| additionalFlags | -PadditionalFlags="--verbose" | Add additional gauge flags to execution separated by space    |
-| gaugeRoot       | -PgaugeRoot="/opt/gauge"      | Path to gauge installation root                               |
+| Property name   | Usage                          | Description                                                   |
+|-----------------|--------------------------------|---------------------------------------------------------------|
+| specsDir        | -PspecsDir=specs               | Gauge specs directory path. Required for executing specs      |
+| tags            | -Ptags="tag1 & tag2"           | Filter specs by specified tags expression                     |
+| inParallel      | -PinParallel=true              | Execute specs in parallel                                     |
+| nodes           | -Pnodes=3                      | Number of parallel execution streams. Use with ```parallel``` |
+| env             | -Penv=qa                       | gauge env to run against                                      |
+| additionalFlags | -PadditionalFlags="--verbose"  | Add additional gauge flags to execution separated by space    |
+| dir             | -Pdir="/path/to/gauge/project" | Path to gauge project directory                               |
+| gaugeRoot       | -PgaugeRoot="/opt/gauge"       | Path to gauge installation root                               |
 
 ### Adding/configuring custom Gauge tasks
 It is possible to define new custom Gauge tasks specific for different environments. For example,

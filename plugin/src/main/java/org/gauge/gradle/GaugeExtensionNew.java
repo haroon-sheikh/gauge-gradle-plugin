@@ -21,6 +21,9 @@ public abstract class GaugeExtensionNew {
     protected abstract ProviderFactory getProviders();
     @Input
     @Optional
+    public abstract Property<String> getDir();
+    @Input
+    @Optional
     public abstract Property<String> getEnv();
 
     @Input

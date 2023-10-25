@@ -2,6 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'jvm-test-suite'
     id 'com.gradle.plugin-publish' version '1.2.1'
+    id 'pmd'
 }
 
 repositories {
@@ -14,6 +15,11 @@ group = 'org.gauge.gradle'
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+pmd {
+    consoleOutput = true
+    ignoreFailures = true
 }
 
 testing {
@@ -43,6 +49,13 @@ testing {
                 }
             }
         }
+    }
+}
+
+tasks.withType(Test).configureEach {
+    testLogging {
+        showStandardStreams = true
+        events = ["passed", "failed", "skipped"]
     }
 }
 

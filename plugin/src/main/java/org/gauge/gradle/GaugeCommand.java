@@ -37,7 +37,17 @@ class GaugeCommand {
     }
 
     public List<String> getProjectDir() {
-        return List.of(GaugeProperty.PROJECT_DIR.getFlag(), project.getProjectDir().getAbsolutePath());
+        return List.of(GaugeProperty.PROJECT_DIR.getFlag(), getDir());
+    }
+
+    private String getDir() {
+        return project.hasProperty(GaugeProperty.PROJECT_DIR.getKey())
+                ? getProjectPath(properties.get(GaugeProperty.PROJECT_DIR.getKey()).toString()).toString()
+                : getProjectPath(extension.getDir().getOrElse(project.getProjectDir().getAbsolutePath())).toString();
+    }
+
+    private Path getProjectPath(final String projectDir) {
+        return Paths.get(projectDir).toAbsolutePath();
     }
 
     public List<String> getEnvironment() {

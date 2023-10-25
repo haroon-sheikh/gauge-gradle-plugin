@@ -20,7 +20,7 @@ public abstract class GaugeValidateTask extends GaugeTaskNew {
         final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
         project.exec(spec -> {
-            spec.executable("gauge");
+            spec.executable(command.getExecutable());
             spec.args("validate");
             spec.args(command.getProjectDir());
             spec.args(command.getSpecsDir());

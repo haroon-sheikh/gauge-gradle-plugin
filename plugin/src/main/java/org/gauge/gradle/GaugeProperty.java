@@ -8,7 +8,7 @@ enum GaugeProperty {
     SPECS_DIR("specsDir", ""),
     IN_PARALLEL("inParallel", "--parallel"),
     NODES("nodes", "--n"),
-    PROJECT_DIR("", "--dir");
+    PROJECT_DIR("dir", "--dir");
 
     private final String key;
     private final String flag;

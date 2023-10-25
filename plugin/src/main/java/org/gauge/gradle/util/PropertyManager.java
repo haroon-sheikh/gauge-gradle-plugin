@@ -47,7 +47,7 @@ public class PropertyManager {
     private void setSpecsDir() {
         String specsDir = (String) properties.get(SPECS_DIR);
         if (specsDir != null) {
-            //extension.setSpecsDir(specsDir);
+            extension.setSpecsDir(specsDir);
         }
     }
 
