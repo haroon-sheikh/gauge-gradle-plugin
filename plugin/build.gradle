@@ -1,5 +1,6 @@
 plugins {
     id 'java-gradle-plugin'
+    id 'jvm-test-suite'
     id 'com.gradle.plugin-publish' version '1.2.1'
 }
 
@@ -15,25 +16,42 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-    testImplementation platform('org.mockito:mockito-bom:5.6.0')
-    testImplementation('org.mockito:mockito-junit-jupiter')
-}
-
-tasks.withType(Test).configureEach {
-    useJUnitPlatform()
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
+testing {
+    suites {
+        configureEach {
+            useJUnitJupiter()
+            dependencies {
+                implementation "org.junit.jupiter:junit-jupiter:5.+"
+                runtimeOnly "org.junit.platform:junit-platform-launcher"
+            }
+        }
+        test {
+            dependencies {
+                implementation platform('org.mockito:mockito-bom:5.6.0')
+                implementation('org.mockito:mockito-junit-jupiter')
+            }
+        }
+        functionalTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
     }
 }
 
+tasks.named('check') {
+    dependsOn(testing.suites.named("functionalTest"))
+}
+
 gradlePlugin {
+    testSourceSets(sourceSets.functionalTest)
     plugins {
         vcsUrl = "https://github.com/getgauge/gauge-gradle-plugin.git"
         website = "https://github.com/getgauge/gauge-gradle-plugin"

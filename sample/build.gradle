@@ -2,6 +2,7 @@ import org.gauge.gradle.GaugeTaskNew
 
 plugins {
     id 'java'
+    id 'jvm-test-suite'
     id 'org.gauge'
 }
 
@@ -93,9 +94,16 @@ tasks.register('gaugeCi', GaugeTaskNew) {
     }
 }
 
-tasks.withType(GaugeTaskNew).configureEach {
+tasks.withType(Test).configureEach {
     // https://docs.gradle.org/8.2/userguide/upgrading_version_8.html#test_framework_implementation_dependencies
-    it.useJUnitPlatform()
+    // Using JUnitPlatform for running tests
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.withType(GaugeTaskNew).configureEach {
     // https://docs.gradle.org/8.2/userguide/upgrading_version_8.html#test_task_default_classpath
     testClassesDirs = sourceSets.test.output
     classpath = sourceSets.test.runtimeClasspath
