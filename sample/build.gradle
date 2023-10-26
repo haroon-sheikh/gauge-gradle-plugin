@@ -104,7 +104,3 @@ tasks.withType(GaugeTaskNew).configureEach {
     testClassesDirs = sourceSets.test.output + sourceSets.spec.output
     classpath = sourceSets.test.runtimeClasspath + sourceSets.spec.runtimeClasspath
 }
-
-tasks.register("gaugeExec", Exec) {
-    commandLine 'gauge.exe', 'validate'
-}
