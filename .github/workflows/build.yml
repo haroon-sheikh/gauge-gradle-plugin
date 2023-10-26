@@ -22,7 +22,7 @@ jobs:
         java-version: '11'
     - uses: getgauge/setup-gauge@master
       with:
-        gauge-plugins: java, html-report, xml-report
+        gauge-version: 'master'
     - uses: gradle/gradle-build-action@v2
     - name: Build with Gradle on ubuntu
       if: matrix.os != 'windows-latest'
