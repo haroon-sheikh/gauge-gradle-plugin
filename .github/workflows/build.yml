@@ -23,7 +23,10 @@ jobs:
     - uses: getgauge/setup-gauge@master
       with:
         gauge-version: 'master'
+        gauge-plugins: java, html-report, xml-report
     - uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '8.2'
     - name: Build with Gradle on ubuntu
       if: matrix.os != 'windows-latest'
       run: ./gradlew plugin:build gaugeValidate gaugeDevRepeat
@@ -32,5 +35,4 @@ jobs:
       run: |
         gauge.exe -v
         cd sample && gauge.exe install
-        gauge validate specs
-        gradle gaugeExec
+        gradle gaugeDev
