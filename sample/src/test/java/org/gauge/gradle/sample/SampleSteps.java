@@ -5,7 +5,7 @@ import com.thoughtworks.gauge.Table;
 import com.thoughtworks.gauge.TableRow;
 import org.junit.jupiter.api.Assertions;
 
-public class StepImplementation {
+public class SampleSteps {
     @Step("Say <greeting> to <product name>")
     public void helloWorld(String greeting, String name) {
         System.out.println(greeting + ", " + name);
@@ -22,7 +22,7 @@ public class StepImplementation {
 
     @Step("A context step which gets executed before every scenario")
     public void contextStep() {
-        Test test = new Test("test");
-        Assertions.assertEquals("test", test.getValue());
+        Sample sample = new Sample("test");
+        Assertions.assertEquals("test", sample.getValue());
     }
 }

@@ -37,9 +37,11 @@ testing {
                 implementation('org.mockito:mockito-junit-jupiter')
             }
         }
-        functionalTest(JvmTestSuite) {
+        integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project()
+                implementation 'commons-io:commons-io:2.15.+'
+                implementation 'org.hamcrest:hamcrest:2.2'
             }
             targets {
                 all {
@@ -60,11 +62,11 @@ tasks.withType(Test).configureEach {
 }
 
 tasks.named('check') {
-    dependsOn(testing.suites.named("functionalTest"))
+    dependsOn(testing.suites.named("integrationTest"))
 }
 
 gradlePlugin {
-    testSourceSets(sourceSets.functionalTest)
+    testSourceSets(sourceSets.integrationTest)
     plugins {
         vcsUrl = "https://github.com/getgauge/gauge-gradle-plugin.git"
         website = "https://github.com/getgauge/gauge-gradle-plugin"

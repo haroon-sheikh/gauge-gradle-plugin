@@ -37,8 +37,6 @@ public class GaugePluginTest {
     public void taskShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
         TaskContainer tasks = project.getTasks();
-        assertEquals(4, tasks.size());
-
         var tasksMap = tasks.getAsMap();
         Task gauge = tasksMap.get(GAUGE_TASK);
         Task classpath = tasksMap.get(GAUGE_CLASSPATH_TASK);

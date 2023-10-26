@@ -1,9 +1,9 @@
 package org.gauge.gradle.sample;
 
-public class Test {
+public class Sample {
     private final String value;
 
-    public Test(String value) {
+    public Sample(String value) {
         this.value = value;
     }
 

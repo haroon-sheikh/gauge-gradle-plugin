@@ -8,11 +8,13 @@ package org.gauge.gradle;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaLibraryPlugin;
 
 public class GaugePlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        project.getPluginManager().apply(JavaLibraryPlugin.class);
         project.getExtensions().create("gaugeOld", GaugeExtension.class);
         project.getExtensions().create(GaugeConstants.GAUGE_EXTENSION_ID, GaugeExtensionNew.class);
         project.getTasks().create(GaugeConstants.GAUGE_TASK, GaugeTaskNew.class);
