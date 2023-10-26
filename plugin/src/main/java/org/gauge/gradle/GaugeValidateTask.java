@@ -2,7 +2,6 @@ package org.gauge.gradle;
 
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ public abstract class GaugeValidateTask extends GaugeTaskNew {
         final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
         project.exec(spec -> {
-            spec.executable(command.getExecutable() + (DefaultNativePlatform.getCurrentOperatingSystem().isWindows() ? ".exe" : ""));
+            spec.executable(command.getExecutable());
             spec.args("validate");
             spec.args(command.getProjectDir());
             spec.args(command.getSpecsDir());
