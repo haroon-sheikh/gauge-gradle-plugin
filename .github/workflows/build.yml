@@ -33,4 +33,4 @@ jobs:
     - name: Build with Gradle on windows
       if: matrix.os == 'windows-latest'
       run: |
-        .\gradlew.bat gaugeDevRepeat
+        .\gradlew.bat plugin:build gaugeValidate gaugeDevRepeat
