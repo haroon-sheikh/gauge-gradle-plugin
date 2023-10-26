@@ -22,7 +22,6 @@ jobs:
         java-version: '11'
     - uses: getgauge/setup-gauge@master
       with:
-        gauge-version: 'master'
         gauge-plugins: java, html-report, xml-report
     - uses: gradle/gradle-build-action@v2
       with:
