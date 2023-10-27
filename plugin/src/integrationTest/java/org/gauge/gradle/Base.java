@@ -47,12 +47,16 @@ class Base {
         try {
             final URL gaugeProject = Thread.currentThread().getContextClassLoader().getResource(gaugeProjectPath.toString());
             Assertions.assertNotNull(gaugeProject, "Could not find the gauge project");
-            final File gaugeProjectDirectory = new File(gaugeProject.toURI());
-            System.out.println("Copying " + gaugeProjectDirectory.getPath() + " to " + testProjectDir.toPath());
             FileUtils.copyDirectory(new File(gaugeProject.toURI()), testProjectDir);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String getApplyPluginsBlock() {
+        return "plugins {id 'org.gauge'}\n"
+                + "repositories {mavenLocal()\nmavenCentral()}\n"
+                + "dependencies {testImplementation 'com.thoughtworks.gauge:gauge-java:+'}";
     }
 
 }
