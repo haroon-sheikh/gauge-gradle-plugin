@@ -3,7 +3,7 @@
 
 ## Vowel counts in single word
 
-tags: single word, example1
+tags: example1
 
 * The word "gauge" has "3" vowels.
 

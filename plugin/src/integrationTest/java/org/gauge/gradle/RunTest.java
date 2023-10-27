@@ -72,7 +72,7 @@ public class RunTest extends Base {
     }
 
     @Test
-    void testCanRunGaugeTestsWhenEnvVariablesSet() throws IOException {
+    void testCanRunGaugeTestsWhenEnvVariablesAndAdditionalFlagsSet() throws IOException {
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When environmentVariables is set in extension
@@ -87,6 +87,29 @@ public class RunTest extends Base {
         assertThat(resultWithExtension.getOutput(), containsString("customVariable is set to customValue in build.gradle"));
         // And I should see the step names included in console output with --verbose flag set
         assertThat(resultWithExtension.getOutput(), containsString("The word \"gauge\" has \"3\" vowels."));
+    }
+
+    @Test
+    void testCanRunGaugeTestsWhenInParallelSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When inParallel=true is set in extension
+        // And additionalFlags include the --verbose flag
+        writeFile(buildFile, getApplyPluginsBlock()
+                + "gauge {specsDir='specs multipleSpecs'\ninParallel=true\n"
+                + "additionalFlags='--simple-console'}\n");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).build();
+        assertEquals(SUCCESS, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see tests running in default parallel streams
+        assertThat(resultWithExtension.getOutput(), containsString("parallel streams."));
+        // When nodes=2 project property is set
+        BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Pnodes=2").build();
+        assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
+        // Then I should see tests running in 2 parallel streams
+        assertThat(resultWithProperty.getOutput(), containsString("Executing in 2 parallel streams."));
+        // And I should see all 4 specifications were executed
+        assertThat(resultWithProperty.getOutput(), containsString("Specifications:\t4 executed"));
     }
 
 }
