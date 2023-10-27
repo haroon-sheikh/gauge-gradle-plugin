@@ -116,6 +116,14 @@ class GaugeCommandTest {
         setProjectProperty(GaugeProperty.ADDITIONAL_FLAGS.getKey(), "-v --repeat");
         assertEquals(List.of("-v", "--repeat"), new GaugeCommand(extension, project).getFlags());
     }
+
+    @Test
+    void testCanGetExecutablePath() {
+        assertEquals("gauge", new GaugeCommand(extension, project).getExecutable());
+        extension.getGaugeRoot().set("/opt/gauge");
+        assertEquals(Path.of("/opt/gauge/bin/gauge").toString(),
+                new GaugeCommand(extension, project).getExecutable());
+    }
     
     private void setProjectProperty(final String key, final Object value) {
         project.getExtensions().getExtraProperties().set(key, value);
