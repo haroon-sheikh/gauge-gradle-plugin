@@ -20,7 +20,7 @@ public class ClasspathTest extends Base {
         writeFile(buildFile, getApplyPluginsBlock());
         // Then I should be able to run the classpath task
         BuildResult result = defaultGradleRunner().withArguments(GAUGE_CLASSPATH_TASK).build();
-        assertEquals(SUCCESS, result.task(":" + GAUGE_TASK_PATH).getOutcome());
+        assertEquals(SUCCESS, result.task(":" + GAUGE_CLASSPATH_TASK).getOutcome());
         assertThat(result.getOutput(), containsString("gauge-java"));
         assertThat(result.getOutput(), containsString("assertj-core"));
     }

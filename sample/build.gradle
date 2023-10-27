@@ -48,7 +48,6 @@ gauge {
     specsDir = 'specs'
     inParallel = true
     nodes = 4
-    env = 'ci'
     additionalFlags = '--verbose'
 }
 
@@ -69,31 +68,6 @@ tasks.register('gaugeDevRepeat', GaugeTaskNew) {
     doFirst {
         gauge {
             additionalFlags = '--repeat --simple-console'
-        }
-    }
-}
-
-tasks.register('gaugeTest', GaugeTaskNew) {
-    doFirst {
-        gauge {
-            specsDir = 'specs'
-            inParallel = true
-            nodes = 4
-            env = 'test'
-            additionalFlags = '--verbose'
-            tags = "hello world"
-        }
-    }
-}
-
-tasks.register('gaugeCi', GaugeTaskNew) {
-    doFirst {
-        gauge {
-            specsDir = 'specs'
-            inParallel = true
-            nodes = 3
-            env = 'ci'
-            additionalFlags = '--verbose'
         }
     }
 }
