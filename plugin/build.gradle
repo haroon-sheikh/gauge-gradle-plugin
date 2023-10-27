@@ -19,7 +19,6 @@ java {
 
 pmd {
     consoleOutput = true
-    ignoreFailures = true
 }
 
 testing {
