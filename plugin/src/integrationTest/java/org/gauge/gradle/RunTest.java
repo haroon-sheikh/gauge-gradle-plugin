@@ -164,7 +164,7 @@ public class RunTest extends Base {
         BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Penv=dev").build();
         assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
         // And I should see tests ran against the dev environment
-        assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
+        assertThat(resultWithProperty.getOutput(), containsString(getExpectedReportPath("dev")));
     }
 
     @Test
@@ -193,7 +193,11 @@ public class RunTest extends Base {
         // And I should only see repeat and simple-console included
         assertThat(resultWithProperty.getOutput(), containsString("--repeat --simple-console"));
         // And I should see tests ran against the dev environment
-        assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
+        assertThat(resultWithProperty.getOutput(), containsString(getExpectedReportPath("dev")));
+    }
+
+    private String getExpectedReportPath(final String env) {
+        return Path.of("reports", env, "html-report", "index.html").toString();
     }
 
 }
