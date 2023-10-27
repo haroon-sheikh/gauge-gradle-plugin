@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class GaugeCommandTest {
 
     private Project project;
-    private GaugeExtensionNew extension;
+    private GaugeExtension extension;
 
     @BeforeEach
     void setUp() {
         project = ProjectBuilder.builder().build();
         project.getPlugins().apply(GaugeConstants.GAUGE_PLUGIN_ID);
-        extension = project.getExtensions().findByType(GaugeExtensionNew.class);
+        extension = project.getExtensions().findByType(GaugeExtension.class);
         assertNotNull(extension, "extension not found");
     }
 

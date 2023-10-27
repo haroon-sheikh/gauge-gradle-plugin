@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 class GaugeCommand {
 
-    private final GaugeExtensionNew extension;
+    private final GaugeExtension extension;
     private final Map<String, ?> properties;
     private final Project project;
 
-    public GaugeCommand(final GaugeExtensionNew extension, final Project project) {
+    public GaugeCommand(final GaugeExtension extension, final Project project) {
         this.extension = extension;
         this.project = project;
         this.properties = project.getProperties();

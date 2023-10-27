@@ -1,4 +1,4 @@
-import org.gauge.gradle.GaugeTaskNew
+import org.gauge.gradle.GaugeTask
 
 plugins {
     id 'java'
@@ -51,7 +51,7 @@ gauge {
     additionalFlags = '--verbose'
 }
 
-tasks.register('gaugeDev', GaugeTaskNew) {
+tasks.register('gaugeDev', GaugeTask) {
     doFirst {
         gauge {
             specsDir = 'specs'
@@ -63,7 +63,7 @@ tasks.register('gaugeDev', GaugeTaskNew) {
     }
 }
 
-tasks.register('gaugeDevRepeat', GaugeTaskNew) {
+tasks.register('gaugeDevRepeat', GaugeTask) {
     dependsOn("gaugeDev")
     doFirst {
         gauge {
@@ -78,7 +78,7 @@ tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
 
-tasks.withType(GaugeTaskNew).configureEach {
+tasks.withType(GaugeTask).configureEach {
     // https://docs.gradle.org/8.2/userguide/upgrading_version_8.html#test_task_default_classpath
     testClassesDirs = sourceSets.test.output + sourceSets.spec.output
     classpath = sourceSets.test.runtimeClasspath + sourceSets.spec.runtimeClasspath

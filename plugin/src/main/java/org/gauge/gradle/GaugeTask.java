@@ -1,67 +1,45 @@
-/*----------------------------------------------------------------
- *  Copyright (c) ThoughtWorks, Inc.
- *  Licensed under the Apache License, Version 2.0
- *  See LICENSE.txt in the project root for license information.
- *----------------------------------------------------------------*/
-
 package org.gauge.gradle;
 
-import org.gauge.gradle.util.ProcessBuilderFactory;
-import org.gauge.gradle.util.PropertyManager;
-import org.gauge.gradle.util.Util;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.testing.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-@SuppressWarnings("WeakerAccess")
 public abstract class GaugeTask extends Test {
-    private final Logger log = LoggerFactory.getLogger("gauge");
+    private static final Logger logger = LoggerFactory.getLogger("gauge");
+
+    public GaugeTask() {
+        this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
+        this.setDescription("Runs the Gauge test suite.");
+        // So that previous outputs of this task cannot be reused
+        this.getOutputs().upToDateWhen(task -> false);
+    }
 
     @TaskAction
-    public void gauge() {
-        Project project = getProject();
-        GaugeExtension extension = project.getExtensions().findByType(GaugeExtension.class);
-        PropertyManager propertyManager = new PropertyManager(project, extension);
-        propertyManager.setProperties();
+    public void execute() {
+        final Project project = getProject();
+        final GaugeExtension extension = project.getExtensions().findByType(GaugeExtension.class);
+        final GaugeCommand command = new GaugeCommand(extension, project);
 
-        ProcessBuilderFactory processBuilderFactory = new ProcessBuilderFactory(extension, project);
-        ProcessBuilder builder = processBuilderFactory.create();
-        if (null != extension) {
-            builder.environment().putAll(
-                    extension.getEnvironmentVariables().entrySet().stream()
-                            .filter(variable -> !builder.environment().containsKey(variable.getKey()))
-                            .filter(variable -> Objects.nonNull(variable.getValue()))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-        }
-        log.info("Executing command => " + builder.command());
-
-        try {
-            Process process = builder.start();
-            executeGaugeSpecs(process);
-        } catch (IOException e) {
-            if (e.getMessage().contains("Cannot run program \"gauge\": error=2, No such file or directory")) {
-                throw new GaugeExecutionFailedException("Gauge or Java runner is not installed! Refer https://docs.gauge.org/getting_started/installing-gauge.html");
+        project.exec(spec -> {
+            // Usage:
+            // gauge <command> [flags] [args]
+            spec.executable(command.getExecutable());
+            spec.args("run");
+            spec.args(command.getProjectDir());
+            spec.args(command.getFlags());
+            if (command.isNotFailedOrRepeatFlagProvided()) {
+                spec.args(command.getEnvironment());
+                spec.args(command.getTags());
+                spec.args(command.getSpecsDir());
             }
-            log.error(e.getMessage() + e.getStackTrace());
-        }
+            spec.environment(GaugeConstants.GAUGE_CUSTOM_CLASSPATH, getClasspath().getAsPath());
+            if (null != extension) {
+                extension.getEnvironmentVariables().get().forEach(spec::environment);
+            }
+            logger.info("Running {} {}", spec.getExecutable(), spec.getArgs());
+        });
     }
 
-    public void executeGaugeSpecs(Process process) throws GaugeExecutionFailedException {
-        try {
-            Util.inheritIO(process.getInputStream(), System.out);
-            Util.inheritIO(process.getErrorStream(), System.err);
-            if (process.waitFor() != 0) {
-                throw new GaugeExecutionFailedException("Execution failed for one or more tests!");
-            }
-        } catch (InterruptedException | NullPointerException e) {
-            throw new GaugeExecutionFailedException(e);
-        }
-    }
 }

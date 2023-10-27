@@ -28,6 +28,7 @@ public class GaugePluginTest {
     @Test
     public void pluginShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
+        assertTrue(project.getPluginManager().hasPlugin("java"));
         assertTrue(project.getPluginManager().hasPlugin(GAUGE_PLUGIN_ID));
         assertTrue(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof GaugePlugin);
         assertFalse(project.getPlugins().getPlugin(GAUGE_PLUGIN_ID) instanceof JavaPlugin);
@@ -39,11 +40,13 @@ public class GaugePluginTest {
         TaskContainer tasks = project.getTasks();
         var tasksMap = tasks.getAsMap();
         Task gauge = tasksMap.get(GAUGE_TASK);
-        Task classpath = tasksMap.get(GAUGE_CLASSPATH_TASK);
-        Task validate = tasksMap.get(GAUGE_VALIDATE_TASK);
         assertEquals(GAUGE_TASK_GROUP, gauge.getGroup());
-        assertTrue(gauge instanceof GaugeTaskNew);
+        assertTrue(gauge instanceof GaugeTask);
+        Task classpath = tasksMap.get(GAUGE_CLASSPATH_TASK);
+        assertEquals(GAUGE_TASK_GROUP, classpath.getGroup());
         assertTrue(classpath instanceof GaugeClasspathTask);
+        Task validate = tasksMap.get(GAUGE_VALIDATE_TASK);
+        assertEquals(GAUGE_TASK_GROUP, validate.getGroup());
         assertTrue(validate instanceof GaugeValidateTask);
     }
 }
