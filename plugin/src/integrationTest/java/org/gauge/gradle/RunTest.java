@@ -143,4 +143,27 @@ public class RunTest extends Base {
         assertThat(resultWithProperty.getOutput(), containsString("Specifications:\t3 executed"));
     }
 
+    @Test
+    void testCanRunGaugeTestsWhenEnvSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When inParallel=true is set in extension
+        // And additionalFlags include the --verbose flag
+        // When env is set to invalid/non-existing
+        writeFile(buildFile, getApplyPluginsBlock()
+                + "gauge {inParallel=true\n"
+                + "additionalFlags='--simple-console'\n"
+                + "env='invalid'}");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).buildAndFail();
+        assertEquals(FAILED, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see environment does not exist error
+        assertThat(resultWithExtension.getOutput(), containsString("invalid environment does not exist"));
+        // When env=dev project property is set
+        BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Penv=dev").build();
+        assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see tests ran against the dev environment
+        assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
+    }
+
 }
