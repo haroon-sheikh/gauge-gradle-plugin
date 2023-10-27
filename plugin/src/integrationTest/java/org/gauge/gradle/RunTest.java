@@ -1,6 +1,7 @@
 package org.gauge.gradle;
 
 import org.gradle.testkit.runner.BuildResult;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -19,9 +20,13 @@ public class RunTest extends Base {
 
     private static final String GAUGE_PROJECT_ONE = "project1";
 
+    @BeforeEach
+    public void setUp() {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+    }
+
     @Test
     void testCanRunGaugeTasksWithDefaultConfigurations() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         writeFile(buildFile, getApplyPluginsBlock());
         // Then I should be able to run the gauge task
@@ -32,7 +37,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenDirPropertySet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         final File subProject = new File(Path.of(defaultGradleRunner().getProjectDir().getPath(), "subProject").toString());
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE, subProject);
         // Given plugin is applied
@@ -44,7 +48,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenDirSetInExtension() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         final File subProject = new File(Path.of(defaultGradleRunner().getProjectDir().getPath(), "subProject").toString());
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE, subProject);
         // Given plugin is applied
@@ -56,7 +59,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenSpecsDirSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When specsDir is set in the extension with an invalid/non-existing directory
         writeFile(buildFile, getApplyPluginsBlock() + "gauge {specsDir=\"invalid\"}\n");
@@ -74,7 +76,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenEnvVariablesAndAdditionalFlagsSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When environmentVariables is set in extension
         // And additionalFlags include the --verbose flag
@@ -92,7 +93,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenInParallelSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When inParallel=true is set in extension
         // And additionalFlags include the --verbose flag
@@ -118,7 +118,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenTagsSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When inParallel=true is set in extension
         // And additionalFlags include the --verbose flag
@@ -146,7 +145,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenEnvSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When inParallel=true is set in extension
         // And additionalFlags include the --verbose flag
@@ -169,7 +167,6 @@ public class RunTest extends Base {
 
     @Test
     void testCanRunGaugeTestsWhenRepeatFlagSet() throws IOException {
-        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         // Given plugin is applied
         // When inParallel=true is set in extension
         // And additionalFlags include the --verbose flag
