@@ -5,6 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
@@ -15,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class GaugeCommandTest {
 
     private Project project;
-    private GaugeExtensionNew extension;
+    private GaugeExtension extension;
 
     @BeforeEach
     void setUp() {
         project = ProjectBuilder.builder().build();
         project.getPlugins().apply(GaugeConstants.GAUGE_PLUGIN_ID);
-        extension = project.getExtensions().findByType(GaugeExtensionNew.class);
+        extension = project.getExtensions().findByType(GaugeExtension.class);
         assertNotNull(extension, "extension not found");
     }
 
@@ -63,8 +64,14 @@ class GaugeCommandTest {
         extension.getDir().set("/usr/ext");
         assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), getProjectPath("/usr/ext")),
                 new GaugeCommand(extension, project).getProjectDir());
+        extension.getDir().set("extDir");
+        assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), Path.of(project.getProjectDir().getPath(), "extDir").toString()),
+                new GaugeCommand(extension, project).getProjectDir());
         setProjectProperty(GaugeProperty.PROJECT_DIR.getKey(), "/project/dir");
         assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), getProjectPath("/project/dir")),
+                new GaugeCommand(extension, project).getProjectDir());
+        setProjectProperty(GaugeProperty.PROJECT_DIR.getKey(), "project/dir");
+        assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), Path.of(project.getProjectDir().getPath(), "project", "dir").toString()),
                 new GaugeCommand(extension, project).getProjectDir());
     }
 
@@ -108,6 +115,14 @@ class GaugeCommandTest {
         assertEquals(List.of("--failed", flag), new GaugeCommand(extension, project).getFlags());
         setProjectProperty(GaugeProperty.ADDITIONAL_FLAGS.getKey(), "-v --repeat");
         assertEquals(List.of("-v", "--repeat"), new GaugeCommand(extension, project).getFlags());
+    }
+
+    @Test
+    void testCanGetExecutablePath() {
+        assertEquals("gauge", new GaugeCommand(extension, project).getExecutable());
+        extension.getGaugeRoot().set("/opt/gauge");
+        assertEquals(Path.of("/opt/gauge/bin/gauge").toString(),
+                new GaugeCommand(extension, project).getExecutable());
     }
     
     private void setProjectProperty(final String key, final Object value) {

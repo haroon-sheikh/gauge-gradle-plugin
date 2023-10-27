@@ -5,7 +5,7 @@ import org.gradle.api.tasks.TaskAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class GaugeValidateTask extends GaugeTaskNew {
+public abstract class GaugeValidateTask extends GaugeTask {
     private static final Logger logger = LoggerFactory.getLogger("gauge");
 
     public GaugeValidateTask() {
@@ -17,7 +17,7 @@ public abstract class GaugeValidateTask extends GaugeTaskNew {
     @TaskAction
     public void execute() {
         final Project project = getProject();
-        final GaugeExtensionNew extension = project.getExtensions().findByType(GaugeExtensionNew.class);
+        final GaugeExtension extension = project.getExtensions().findByType(GaugeExtension.class);
         final GaugeCommand command = new GaugeCommand(extension, project);
         project.exec(spec -> {
             spec.executable(command.getExecutable());

@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 class GaugeCommand {
 
-    private final GaugeExtensionNew extension;
+    private final GaugeExtension extension;
     private final Map<String, ?> properties;
     private final Project project;
 
-    public GaugeCommand(final GaugeExtensionNew extension, final Project project) {
+    public GaugeCommand(final GaugeExtension extension, final Project project) {
         this.extension = extension;
         this.project = project;
         this.properties = project.getProperties();
@@ -47,7 +47,7 @@ class GaugeCommand {
     }
 
     private Path getProjectPath(final String projectDir) {
-        return Paths.get(projectDir).toAbsolutePath();
+        return project.getProjectDir().toPath().resolve(Path.of(projectDir)).toAbsolutePath();
     }
 
     public List<String> getEnvironment() {
@@ -114,7 +114,7 @@ class GaugeCommand {
         final String tags = project.hasProperty(GaugeProperty.TAGS.getKey())
                 ? properties.get(GaugeProperty.TAGS.getKey()).toString()
                 : extension.getTags().isPresent() ? extension.getTags().get() : "";
-        return !tags.isEmpty() ? List.of("--tags", tags) : Collections.emptyList();
+        return !tags.isEmpty() ? List.of(GaugeProperty.TAGS.getFlag(), tags) : Collections.emptyList();
     }
 
 }
