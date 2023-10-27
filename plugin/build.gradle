@@ -58,6 +58,7 @@ tasks.withType(Test).configureEach {
     testLogging {
         showStandardStreams = true
         showStackTraces = true
+        exceptionFormat = 'full'
         events = ["passed", "failed", "skipped"]
     }
 }
