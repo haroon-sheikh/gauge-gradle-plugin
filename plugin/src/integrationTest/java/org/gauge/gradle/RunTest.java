@@ -96,13 +96,16 @@ public class RunTest extends Base {
         // When inParallel=true is set in extension
         // And additionalFlags include the --verbose flag
         writeFile(buildFile, getApplyPluginsBlock()
-                + "gauge {specsDir='specs multipleSpecs'\ninParallel=true\n"
+                + "gauge {specsDir='specs multipleSpecs'\n"
+                + "inParallel=true\n"
                 + "additionalFlags='--simple-console'}\n");
         // Then I should be able to run the gauge task
         BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).build();
         assertEquals(SUCCESS, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
         // And I should see tests running in default parallel streams
         assertThat(resultWithExtension.getOutput(), containsString("parallel streams."));
+        // And I should see all 4 specifications were executed
+        assertThat(resultWithExtension.getOutput(), containsString("Specifications:\t4 executed"));
         // When nodes=2 project property is set
         BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Pnodes=2").build();
         assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
@@ -110,6 +113,34 @@ public class RunTest extends Base {
         assertThat(resultWithProperty.getOutput(), containsString("Executing in 2 parallel streams."));
         // And I should see all 4 specifications were executed
         assertThat(resultWithProperty.getOutput(), containsString("Specifications:\t4 executed"));
+    }
+
+    @Test
+    void testCanRunGaugeTestsWhenTagsSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When inParallel=true is set in extension
+        // And additionalFlags include the --verbose flag
+        // And tags=example1 set to run
+        writeFile(buildFile, getApplyPluginsBlock()
+                + "gauge {specsDir='specs multipleSpecs'\n"
+                + "inParallel=true\n"
+                + "additionalFlags='--simple-console'\n"
+                + "tags='example1'}");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).build();
+        assertEquals(SUCCESS, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see tests running only with specified tag
+        assertThat(resultWithExtension.getOutput(), containsString("parallel streams."));
+        assertThat(resultWithExtension.getOutput(), containsString("Specifications:\t2 executed"));
+        // When nodes=2 project property is set
+        // And tags project property is set to run either scenarios with example1 or example2 tags
+        BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Pnodes=2", "-Ptags=example1|example2").build();
+        assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
+        // Then I should see tests running in 2 parallel streams
+        assertThat(resultWithProperty.getOutput(), containsString("Executing in 2 parallel streams."));
+        // And I should see all matching 3 specifications were executed
+        assertThat(resultWithProperty.getOutput(), containsString("Specifications:\t3 executed"));
     }
 
 }
