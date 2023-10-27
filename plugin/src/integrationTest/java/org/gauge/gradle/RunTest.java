@@ -12,6 +12,7 @@ import static org.gradle.testkit.runner.TaskOutcome.FAILED;
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RunTest extends Base {
@@ -163,6 +164,34 @@ public class RunTest extends Base {
         BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-Penv=dev").build();
         assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
         // And I should see tests ran against the dev environment
+        assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
+    }
+
+    @Test
+    void testCanRunGaugeTestsWhenRepeatFlagSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When inParallel=true is set in extension
+        // And additionalFlags include the --verbose flag
+        // When env is set to dev
+        writeFile(buildFile, getApplyPluginsBlock()
+                + "gauge {inParallel=true\n"
+                + "additionalFlags='--simple-console'\n"
+                + "nodes=2\n"
+                + "env='dev'}");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK, "--info").build();
+        assertEquals(SUCCESS, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see environment and parallel flags with specs in the command
+        assertThat(resultWithExtension.getOutput(), containsString("--simple-console --parallel --n 2 --env dev specs"));
+        // When additionalFlags include the --repeat flag
+        BuildResult resultWithProperty = defaultGradleRunner()
+                .withArguments(GAUGE_TASK, "-PadditionalFlags=--repeat --simple-console", "--info").build();
+        assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see tests ran against the dev environment
+        // Then I should not see environment and parallel flags and specs include the command
+        assertThat(resultWithProperty.getOutput(), not(containsString("--parallel --n 2 --env dev specs")));
+        assertThat(resultWithProperty.getOutput(), containsString("--repeat --simple-console"));
         assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
     }
 
