@@ -20,6 +20,7 @@ public class ClasspathTest extends Base {
         // Then I should be able to run the classpath task
         BuildResult result = defaultGradleRunner().withArguments("classpath").build();
         assertEquals(SUCCESS, result.task(":classpath").getOutcome());
+        System.out.println(result.getOutput());
         assertThat(result.getOutput(), containsString("com/thoughtworks/gauge/gauge-java"));
         assertThat(result.getOutput(), containsString("org/assertj/assertj-core"));
         assertThat(result.getOutput(), containsString("org/json/json"));
