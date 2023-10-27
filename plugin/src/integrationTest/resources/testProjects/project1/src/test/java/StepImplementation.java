@@ -22,6 +22,7 @@ public class StepImplementation {
     public void verifyVowelsCountInWord(String word, int expectedCount) {
         int actualCount = countVowels(word);
         assertThat(expectedCount).isEqualTo(actualCount);
+        System.out.println(String.format("customVariable is set to %s in build.gradle", System.getenv("customVariable")));
     }
 
     @Step("Almost all words have vowels <wordsTable>")

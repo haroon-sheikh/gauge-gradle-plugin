@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.gauge.gradle.GaugeConstants.GAUGE_TASK;
+import static org.gradle.testkit.runner.TaskOutcome.FAILED;
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -29,7 +30,7 @@ public class RunTest extends Base {
     }
 
     @Test
-    void testCanRunGaugeTestsFromADifferentDirectoryWhenDirPropertySet() throws IOException {
+    void testCanRunGaugeTestsWhenDirPropertySet() throws IOException {
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         final File subProject = new File(Path.of(defaultGradleRunner().getProjectDir().getPath(), "subProject").toString());
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE, subProject);
@@ -41,15 +42,51 @@ public class RunTest extends Base {
     }
 
     @Test
-    void testCanRunGaugeTestsFromADifferentDirectoryWhenDirSetInExtension() throws IOException {
+    void testCanRunGaugeTestsWhenDirSetInExtension() throws IOException {
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
         final File subProject = new File(Path.of(defaultGradleRunner().getProjectDir().getPath(), "subProject").toString());
         copyGaugeProjectToTemp(GAUGE_PROJECT_ONE, subProject);
         // Given plugin is applied
         writeFile(buildFile, getApplyPluginsBlock() + "gauge {dir=\"subProject\"}");
         // Then I should be able to run the gauge task
-        BuildResult resultWithExtensionProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "--info").build();
+        BuildResult resultWithExtensionProperty = defaultGradleRunner().withArguments(GAUGE_TASK).build();
         assertEquals(SUCCESS, resultWithExtensionProperty.task(GAUGE_TASK_PATH).getOutcome());
+    }
+
+    @Test
+    void testCanRunGaugeTestsWhenSpecsDirSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When specsDir is set in the extension with an invalid/non-existing directory
+        writeFile(buildFile, getApplyPluginsBlock() + "gauge {specsDir=\"invalid\"}\n");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).buildAndFail();
+        // And I should get a failure with missing specs directory
+        assertEquals(FAILED, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        assertThat(resultWithExtension.getOutput(), containsString("Specs directory invalid does not exist."));
+        // When specsDir is set to multiple specs directory with one being an invalid/non-existing directory
+        BuildResult resultWithProperty = defaultGradleRunner().withArguments(GAUGE_TASK, "-PspecsDir=specs specs2").buildAndFail();
+        // And I should get a failure with missing specs directory
+        assertEquals(FAILED, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
+        assertThat(resultWithProperty.getOutput(), containsString("Specs directory specs2 does not exist."));
+    }
+
+    @Test
+    void testCanRunGaugeTestsWhenEnvVariablesSet() throws IOException {
+        copyGaugeProjectToTemp(GAUGE_PROJECT_ONE);
+        // Given plugin is applied
+        // When environmentVariables is set in extension
+        // And additionalFlags include the --verbose flag
+        writeFile(buildFile, getApplyPluginsBlock()
+                + "gauge {environmentVariables=['customVariable': 'customValue']\n"
+                + "additionalFlags='--simple-console --verbose'}\n");
+        // Then I should be able to run the gauge task
+        BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_TASK).build();
+        assertEquals(SUCCESS, resultWithExtension.task(GAUGE_TASK_PATH).getOutcome());
+        // And I should see custom environment was set correctly
+        assertThat(resultWithExtension.getOutput(), containsString("customVariable is set to customValue in build.gradle"));
+        // And I should see the step names included in console output with --verbose flag set
+        assertThat(resultWithExtension.getOutput(), containsString("The word \"gauge\" has \"3\" vowels."));
     }
 
 }
