@@ -26,7 +26,7 @@ public class ValidateTest extends Base {
         assertThat(result.getOutput(), containsString("No errors found."));
         // When specsDir is set in extension
         // And example4.spec contains a missing step implementation
-        writeFile(buildFile, getApplyPluginsBlock() + "gauge {specsDir=\"multipleSpecs/example4.spec\"}\n");;
+        writeFile(buildFile, getApplyPluginsBlock() + "gauge {specsDir=\"multipleSpecs/example4.spec\"}\n");
         BuildResult resultWithExtension = defaultGradleRunner().withArguments(GAUGE_VALIDATE_TASK).buildAndFail();
         // Then I should see a failure with a validation error
         assertEquals(FAILED, resultWithExtension.task(":" + GAUGE_VALIDATE_TASK).getOutcome());
