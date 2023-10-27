@@ -14,8 +14,6 @@ public abstract class GaugeClasspathTask extends Test {
     public GaugeClasspathTask() {
         this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
         this.setDescription("Gets the classpath.");
-        // So that previous outputs of this task cannot be reused
-        this.getOutputs().upToDateWhen(task -> false);
     }
 
     @TaskAction

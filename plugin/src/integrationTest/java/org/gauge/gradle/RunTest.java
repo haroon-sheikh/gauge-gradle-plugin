@@ -1,7 +1,6 @@
 package org.gauge.gradle;
 
 import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,13 +18,9 @@ public class RunTest extends Base {
         // Given plugin is applied
         writeFile(buildFile, getApplyPluginsBlock());
         // Then I should be able to run the gauge task
-        BuildResult result = GradleRunner.create()
-                .withProjectDir(testProjectDir)
-                .withArguments("gauge")
-                .withPluginClasspath()
-                .build();
-        assertThat(result.getOutput(), containsString("Successfully generated html-report"));
+        BuildResult result = defaultGradleRunner().withArguments("gauge").build();
         assertEquals(SUCCESS, result.task(":gauge").getOutcome());
+        assertThat(result.getOutput(), containsString("Successfully generated html-report"));
     }
 
 }

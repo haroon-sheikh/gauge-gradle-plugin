@@ -26,16 +26,6 @@ class Base {
         buildFile = new File(testProjectDir, "build.gradle");
     }
 
-    protected GradleRunner gradleRunner() throws IOException {
-        return GradleRunner.create()
-                .withProjectDir(rootFolder())
-                .withPluginClasspath();
-    }
-
-    protected File rootFolder() throws IOException {
-        return testProjectDir.getCanonicalFile();
-    }
-
     protected void writeFile(File destination, String content) throws IOException {
         try (BufferedWriter output = new BufferedWriter(new FileWriter(destination))) {
             output.write(content);
@@ -57,6 +47,12 @@ class Base {
         return "plugins {id 'org.gauge'}\n"
                 + "repositories {mavenLocal()\nmavenCentral()}\n"
                 + "dependencies {testImplementation 'com.thoughtworks.gauge:gauge-java:+'}";
+    }
+
+    protected GradleRunner defaultGradleRunner() {
+        return GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withPluginClasspath();
     }
 
 }
