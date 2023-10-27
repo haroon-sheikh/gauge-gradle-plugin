@@ -5,6 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
@@ -63,8 +64,14 @@ class GaugeCommandTest {
         extension.getDir().set("/usr/ext");
         assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), getProjectPath("/usr/ext")),
                 new GaugeCommand(extension, project).getProjectDir());
+        extension.getDir().set("extDir");
+        assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), Path.of(project.getProjectDir().getPath(), "extDir").toString()),
+                new GaugeCommand(extension, project).getProjectDir());
         setProjectProperty(GaugeProperty.PROJECT_DIR.getKey(), "/project/dir");
         assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), getProjectPath("/project/dir")),
+                new GaugeCommand(extension, project).getProjectDir());
+        setProjectProperty(GaugeProperty.PROJECT_DIR.getKey(), "project/dir");
+        assertEquals(List.of(GaugeProperty.PROJECT_DIR.getFlag(), Path.of(project.getProjectDir().getPath(), "project", "dir").toString()),
                 new GaugeCommand(extension, project).getProjectDir());
     }
 

@@ -16,14 +16,16 @@ import java.nio.file.Path;
 class Base {
 
     @TempDir
-    File testProjectDir;
+    File primaryProjectDir;
     File settingsFile;
     File buildFile;
 
+    protected static final String GAUGE_TASK_PATH = ":gauge";
+
     @BeforeEach
     public void setup() {
-        settingsFile = new File(testProjectDir, "settings.gradle");
-        buildFile = new File(testProjectDir, "build.gradle");
+        settingsFile = new File(primaryProjectDir, "settings.gradle");
+        buildFile = new File(primaryProjectDir, "build.gradle");
     }
 
     protected void writeFile(File destination, String content) throws IOException {
@@ -33,6 +35,10 @@ class Base {
     }
 
     protected void copyGaugeProjectToTemp(final String project) {
+        copyGaugeProjectToTemp(project, primaryProjectDir);
+    }
+
+    protected void copyGaugeProjectToTemp(final String project, final File testProjectDir) {
         final Path gaugeProjectPath = Path.of("testProjects", project);
         try {
             final URL gaugeProject = Thread.currentThread().getContextClassLoader().getResource(gaugeProjectPath.toString());
@@ -46,12 +52,12 @@ class Base {
     protected String getApplyPluginsBlock() {
         return "plugins {id 'org.gauge'}\n"
                 + "repositories {mavenLocal()\nmavenCentral()}\n"
-                + "dependencies {testImplementation 'com.thoughtworks.gauge:gauge-java:+'}";
+                + "dependencies {testImplementation 'com.thoughtworks.gauge:gauge-java:+'}\n";
     }
 
     protected GradleRunner defaultGradleRunner() {
         return GradleRunner.create()
-                .withProjectDir(testProjectDir)
+                .withProjectDir(primaryProjectDir)
                 .withPluginClasspath();
     }
 

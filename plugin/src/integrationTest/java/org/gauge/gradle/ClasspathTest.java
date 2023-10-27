@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.gauge.gradle.GaugeConstants.GAUGE_CLASSPATH_TASK;
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -18,8 +19,8 @@ public class ClasspathTest extends Base {
         // Given plugin is applied without gauge extension
         writeFile(buildFile, getApplyPluginsBlock());
         // Then I should be able to run the classpath task
-        BuildResult result = defaultGradleRunner().withArguments("classpath").build();
-        assertEquals(SUCCESS, result.task(":classpath").getOutcome());
+        BuildResult result = defaultGradleRunner().withArguments(GAUGE_CLASSPATH_TASK).build();
+        assertEquals(SUCCESS, result.task(":" + GAUGE_TASK_PATH).getOutcome());
         assertThat(result.getOutput(), containsString("gauge-java"));
         assertThat(result.getOutput(), containsString("assertj-core"));
     }
