@@ -188,10 +188,11 @@ public class RunTest extends Base {
         BuildResult resultWithProperty = defaultGradleRunner()
                 .withArguments(GAUGE_TASK, "-PadditionalFlags=--repeat --simple-console", "--info").build();
         assertEquals(SUCCESS, resultWithProperty.task(GAUGE_TASK_PATH).getOutcome());
-        // And I should see tests ran against the dev environment
         // Then I should not see environment and parallel flags and specs include the command
         assertThat(resultWithProperty.getOutput(), not(containsString("--parallel --n 2 --env dev specs")));
+        // And I should only see repeat and simple-console included
         assertThat(resultWithProperty.getOutput(), containsString("--repeat --simple-console"));
+        // And I should see tests ran against the dev environment
         assertThat(resultWithProperty.getOutput(), containsString("reports/dev/html-report/index.html"));
     }
 
