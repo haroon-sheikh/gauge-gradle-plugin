@@ -25,8 +25,8 @@ class GaugeCommand {
 
     public String getExecutable() {
         final String binary = "gauge";
-        return project.hasProperty(GaugeConstants.GAUGE_ROOT)
-                ? getExecutablePath(properties.get(GaugeConstants.GAUGE_ROOT).toString()).toString()
+        return project.hasProperty(GaugeProperty.GAUGE_ROOT.getKey())
+                ? getExecutablePath(properties.get(GaugeProperty.GAUGE_ROOT.getKey()).toString()).toString()
                 : extension.getGaugeRoot().isPresent()
                 ? getExecutablePath(extension.getGaugeRoot().get()).toString()
                 : binary;

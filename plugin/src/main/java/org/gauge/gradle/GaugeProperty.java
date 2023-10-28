@@ -4,6 +4,7 @@ enum GaugeProperty {
 
     ADDITIONAL_FLAGS("additionalFlags", ""),
     ENV("env", "--env"),
+    GAUGE_ROOT("gaugeRoot", ""),
     TAGS("tags", "--tags"),
     SPECS_DIR("specsDir", ""),
     IN_PARALLEL("inParallel", "--parallel"),
