@@ -1,17 +1,17 @@
 package org.gauge.gradle;
 
-import org.apache.commons.io.FileUtils;
-import org.gradle.testkit.runner.GradleRunner;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.apache.commons.io.FileUtils;
+import org.gradle.testkit.runner.GradleRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 class Base {
 
@@ -23,9 +23,15 @@ class Base {
     protected static final String GAUGE_TASK_PATH = ":gauge";
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws IOException {
         settingsFile = new File(primaryProjectDir, "settings.gradle");
         buildFile = new File(primaryProjectDir, "build.gradle");
+        writeSettingsFileWithIncludeBuild();
+    }
+
+    protected void writeSettingsFileWithIncludeBuild() throws IOException {
+        String settingsContent = "includeBuild(\"" + Paths.get("").toAbsolutePath() + "\")";
+        writeFile(settingsFile, settingsContent);
     }
 
     protected void writeFile(File destination, String content) throws IOException {

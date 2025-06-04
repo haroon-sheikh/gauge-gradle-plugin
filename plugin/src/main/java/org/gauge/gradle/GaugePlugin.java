@@ -20,5 +20,8 @@ public class GaugePlugin implements Plugin<Project> {
         project.getTasks().create(GaugeConstants.GAUGE_TASK, GaugeTask.class);
         project.getTasks().create(GaugeConstants.GAUGE_VALIDATE_TASK, GaugeValidateTask.class);
         project.getTasks().create(GaugeConstants.GAUGE_CLASSPATH_TASK, GaugeClasspathTask.class);
+        project.getTasks().withType(AbstractGaugeTask.class).configureEach(task -> {
+            task.dependsOn("build");
+        });
     }
 }
