@@ -3,6 +3,7 @@ package org.gauge.gradle;
 import javax.inject.Inject;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecOperations;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 @DisableCachingByDefault
 public abstract class AbstractGaugeTask extends DefaultTask {
+
     protected static final Logger logger = LoggerFactory.getLogger("gauge");
     protected final ExecOperations execOps;
     protected final Project project;
@@ -22,10 +24,12 @@ public abstract class AbstractGaugeTask extends DefaultTask {
         this.execOps = execOps;
         this.project = project;
         this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
+        this.dependsOn("build");
     }
 
     protected abstract void configureSpec(final ExecSpec spec, final GaugeCommand command);
 
+    @Internal
     private String getClasspath() {
         return project.getExtensions().getByType(SourceSetContainer.class)
             .getByName("test")
