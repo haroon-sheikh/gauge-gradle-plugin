@@ -36,6 +36,15 @@ public class GaugePluginTest {
     }
 
     @Test
+    void gaugeTasksShouldDependOnBuild() {
+        project.getPluginManager().apply(GAUGE_PLUGIN_ID);
+        project.getTasks().withType(AbstractGaugeTask.class).forEach(task -> assertTrue(
+            task.getDependsOn().stream().anyMatch(dep -> "build".equals(dep.toString())),
+            "Task " + task.getName() + " should depend on 'build'"
+        ));
+    }
+
+    @Test
     public void taskShouldBeAddedOnApply() {
         project.getPluginManager().apply(GAUGE_PLUGIN_ID);
         TaskContainer tasks = project.getTasks();

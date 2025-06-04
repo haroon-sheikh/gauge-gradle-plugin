@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Assertions;
@@ -23,15 +22,9 @@ class Base {
     protected static final String GAUGE_TASK_PATH = ":gauge";
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
         settingsFile = new File(primaryProjectDir, "settings.gradle");
         buildFile = new File(primaryProjectDir, "build.gradle");
-        writeSettingsFileWithIncludeBuild();
-    }
-
-    protected void writeSettingsFileWithIncludeBuild() throws IOException {
-        String settingsContent = "includeBuild(\"" + Paths.get("").toAbsolutePath() + "\")";
-        writeFile(settingsFile, settingsContent);
     }
 
     protected void writeFile(File destination, String content) throws IOException {

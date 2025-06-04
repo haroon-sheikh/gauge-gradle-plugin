@@ -48,7 +48,6 @@ public abstract class AbstractGaugeTask extends DefaultTask {
                 extension.getEnvironmentVariables().get().forEach(spec::environment);
             }
             logger.info("Running {} {}", spec.getExecutable(), spec.getArgs());
-            System.out.println("Running " + spec.getExecutable() + " " + spec.getArgs());
         });
     }
 
