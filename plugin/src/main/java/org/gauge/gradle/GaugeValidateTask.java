@@ -10,7 +10,6 @@ public abstract class GaugeValidateTask extends AbstractGaugeTask {
     @Inject
     public GaugeValidateTask(final ExecOperations execOps, final Project project) {
         super(execOps, project);
-        this.setGroup(GaugeConstants.GAUGE_TASK_GROUP);
         this.setDescription("Check for validation and parse errors.");
     }
 

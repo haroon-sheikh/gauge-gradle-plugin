@@ -1,13 +1,12 @@
 package org.gauge.gradle;
 
-import org.gradle.testkit.runner.BuildResult;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
 import static org.gauge.gradle.GaugeConstants.GAUGE_TASK;
 import static org.gradle.testkit.runner.TaskOutcome.NO_SOURCE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import org.gradle.testkit.runner.BuildResult;
+import org.junit.jupiter.api.Test;
 
 public class ApplyTest extends Base {
 
